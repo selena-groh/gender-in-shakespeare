@@ -14,7 +14,7 @@ var play = {
   "henry8": "Henry VIII",
   "jc": "Julius Caesar",
   "kj": "King John",
-  "kl": "King Lear",
+  "lear": "King Lear",
   "lll": "Love's Labour's Lost",
   "mac": "Macbeth",
   "meas": "Measure for Measure",

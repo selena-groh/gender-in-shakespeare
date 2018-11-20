@@ -10,3 +10,4 @@ list of plays and their chronology
 # of female characters in each play -- over time
 word count of female characters vs. male per play
 word count of female characters vs. male overall
+longest play
