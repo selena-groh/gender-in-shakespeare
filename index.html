@@ -1,0 +1,42 @@
+<!doctype html>
+
+<html lang='en'>
+<head>
+  <meta charset='utf-8'>
+
+  <title>Shakespeare</title>
+  <meta name='description' content="Visualizing Shakespeare's plays and characters">
+  <meta name='author' content='Emily Davis and Selena Groh'>
+
+  <script lang="javascript" src="js/jquery-3.1.0.min.js"></script>
+  <script lang="javascript" src="js/d3.v4.min.js"></script>
+  <link rel='stylesheet' type='text/css' href='css/styles.css'>
+
+</head>
+
+<body>
+  <h1>Visualizing Shakespeare</h1>
+
+  <div id='lines'>
+  <h2>Lines</h2>
+  </div>
+
+  <script src='js/scripts.js'></script>
+  <script src='js/shakes-small.js'></script>
+  <script src='js/play-abbrev.js'></script>
+  <script>
+    const len = shakes.length;
+    for (var i = 0; i < len/20; i++) {
+      console.log(shakes[i]);
+    }
+
+    const lines = d3.select('#lines');
+    lines.selectAll('p')
+        .data(shakes)
+        .enter()
+        .append('p')
+          .text(function(d) {return play[d.play] + ' - ' + d.who + ': ' + d.w;});
+
+  </script>
+</body>
+</html>
