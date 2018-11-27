@@ -4,66 +4,42 @@
 <head>
   <meta charset='utf-8'>
 
-  <title>Shakespeare</title>
-  <meta name='description' content="Visualizing Shakespeare's plays and characters">
+  <title>Gender in Shakespeare</title>
+  <meta name='description' content="Gender in Shakespeare">
   <meta name='author' content='Emily Davis and Selena Groh'>
 
   <script lang="javascript" src="js/jquery-3.1.0.min.js"></script>
   <script lang="javascript" src="js/d3.v4.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css?family=Charmonman|Lato" rel="stylesheet">
   <link rel='stylesheet' type='text/css' href='css/styles.css'>
 
 </head>
 
 <body>
-  <h1>Visualizing Shakespeare</h1>
 
-  <div id='playsChars'>
-    <h2>Plays and Characters</h2>
+  <div id='container'>
+
+    <div id='center'>
+      <div id='header'>
+        <h1>Gender in Shakespeare's Plays</h1>
+      </div>
+    </div>
+
+    <div id='left'>
+      <div id='timeline'>
+        <svg width='300' height='800'></svg>
+      </div>
+    </div>
+
+    <div id='right'>
+      <div id='play'>
+      </div>
+    </div>
   </div>
 
-<!--   <div id='lines'>
-    <h2>Lines</h2>
-  </div> -->
-
-  <script src='js/scripts.js'></script>
-  <script src='js/shakes-small.js'></script>
   <script src='js/shakes-plays-chars.js'></script>
   <script src='js/play-abbrev.js'></script>
-  <script>
-    for (var i = 0; i < shakesPlaysChars.length; i++) {
-      console.log(shakesPlaysChars[i]);
-    }
-
-    function getCharacters(chars) {
-      const len = chars.length;
-      let charList = '';
-      for (var i = 0; i < len; i++) {
-        console.log(chars[i]);
-        charList = charList + chars[i].who + ' (' + chars[i].wc + '), ';
-      }
-      return charList;
-    }
-
-    const playsChars = d3.select('#playsChars');
-    playsChars.selectAll('p')
-        .data(shakesPlaysChars)
-        .enter()
-        .append('p')
-         // + ': ' + getCharacters(d.characters);
-          .text(function(d) {return d.title + ' (' + d.year + ') - ' + d.genre + '  ' + d.characters.length});
-
-    // const len = shakes.length;
-    // for (var i = 0; i < len/20; i++) {
-    //   console.log(shakes[i]);
-    // }
-
-    // const lines = d3.select('#lines');
-    // lines.selectAll('p')
-    //     .data(shakes)
-    //     .enter()
-    //     .append('p')
-    //       .text(function(d) {return play[d.play] + ' - ' + d.who + ': ' + d.w;});
-
-  </script>
+  <script src='js/scripts.js'></script>
 </body>
 </html>
