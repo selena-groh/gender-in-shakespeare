@@ -3,6 +3,10 @@ var shakesPlaysChars = [
     "title": "A Midsummer Night's Dream",
     "year": 1595,
     "genre": "Comedy",
+    "sumM": 12317,
+    "avgM": 947.46,
+    "sumW": 4714,
+    "avgW": 1178.5,
     "characters": [
       {
         "who": "Bottom",
@@ -95,6 +99,10 @@ var shakesPlaysChars = [
     "title": "All's Well that Ends Well",
     "year": 1602,
     "genre": "Comedy",
+    "sumM": 13081,
+    "avgM": 1635.13,
+    "sumW": 8001,
+    "avgW": 1600.2,
     "characters": [
       {
         "who": "Bertram",
@@ -167,6 +175,10 @@ var shakesPlaysChars = [
     "title": "Antony and Cleopatra",
     "year": 1607,
     "genre": "Tragedy",
+    "sumM": 18515,
+    "avgM": 617.17,
+    "sumW": 6360,
+    "avgW": 1590,
     "characters": [
       {
         "who": "Agrippa",
@@ -344,6 +356,10 @@ var shakesPlaysChars = [
     "title": "As You Like It",
     "year": 1599,
     "genre": "Comedy",
+    "sumM": 12273,
+    "avgM": 818.2,
+    "sumW": 9498,
+    "avgW": 2374.5,
     "characters": [
       {
         "who": "Adam",
@@ -446,6 +462,10 @@ var shakesPlaysChars = [
     "title": "Coriolanus",
     "year": 1608,
     "genre": "Tragedy",
+    "sumM": 16855,
+    "avgM": 1872.78,
+    "sumW": 3239,
+    "avgW": 809.75,
     "characters": [
       {
         "who": "Adrian",
@@ -518,6 +538,10 @@ var shakesPlaysChars = [
     "title": "Cymbeline",
     "year": 1609,
     "genre": "Tragedy",
+    "sumM": 20603,
+    "avgM": 1471.64,
+    "sumW": 6064,
+    "avgW": 3032,
     "characters": [
       {
         "who": "Arviragus",
@@ -605,6 +629,10 @@ var shakesPlaysChars = [
     "title": "Hamlet",
     "year": 1601,
     "genre": "Tragedy",
+    "sumM": 28035,
+    "avgM": 1475.53,
+    "sumW": 2425,
+    "avgW": 1212.5,
     "characters": [
       {
         "who": "Barnardo",
@@ -717,6 +745,10 @@ var shakesPlaysChars = [
     "title": "Henry IV, Part 1",
     "year": 1597,
     "genre": "History",
+    "sumM": 23941,
+    "avgM": 1197.05,
+    "sumW": 901,
+    "avgW": 450.5,
     "characters": [
       {
         "who": "Archbishop",
@@ -834,6 +866,10 @@ var shakesPlaysChars = [
     "title": "Henry IV, Part 2",
     "year": 1597,
     "genre": "History",
+    "sumM": 23735, 
+    "avgM": 791.17,
+    "sumW": 2624,
+    "avgW": 656,
     "characters": [
       {
         "who": "Archbishop",
@@ -1011,6 +1047,10 @@ var shakesPlaysChars = [
     "title": "Henry V",
     "year": 1599,
     "genre": "History",
+    "sumM": 24932,
+    "avgM": 733.29,
+    "sumW": 1302,
+    "avgW": 325.5,
     "characters": [
       {
         "who": "Alice",
@@ -1208,6 +1248,10 @@ var shakesPlaysChars = [
     "title": "Henry VI, Part 1",
     "year": 1592,
     "genre": "History",
+    "sumM": 18570,
+    "avgM": 562.73,
+    "sumW": 2830,
+    "avgW": 943.33,
     "characters": [
       {
         "who": "Alanson",
@@ -1395,6 +1439,10 @@ var shakesPlaysChars = [
     "title": "Henry VI, Part 2",
     "year": 1591,
     "genre": "History",
+    "sumM": 22960,
+    "avgM": 560,
+    "sumW": 3798,
+    "avgW": 1266,
     "characters": [
       {
         "who": "Beadle",
@@ -1622,6 +1670,10 @@ var shakesPlaysChars = [
     "title": "Henry VI, Part 3",
     "year": 1591,
     "genre": "History",
+    "sumM": 21689,
+    "avgM": 774.61,
+    "sumW": 3249,
+    "avgW": 1083,
     "characters": [
       {
         "who": "Clarence",
@@ -1784,6 +1836,10 @@ var shakesPlaysChars = [
     "title": "Henry VIII",
     "year": 1613,
     "genre": "History",
+    "sumM": 18184,
+    "avgM": 606.13, 
+    "sumW": 4180,
+    "avgW": 1393.33,
     "characters": [
       {
         "who": "Abergavenny",
@@ -1956,6 +2012,10 @@ var shakesPlaysChars = [
     "title": "Julius Caesar",
     "year": 1599,
     "genre": "Tragedy",
+    "sumM": 17412,
+    "avgM": 791.45,
+    "sumW": 987,
+    "avgW": 493.5,
     "characters": [
       {
         "who": "Antony",
@@ -2083,6 +2143,10 @@ var shakesPlaysChars = [
     "title": "King John",
     "year": 1596,
     "genre": "History",
+    "sumM": 17736,
+    "avgM": 985.33,
+    "sumW": 3176,
+    "avgw": 794,
     "characters": [
       {
         "who": "Arthur",
@@ -2200,6 +2264,10 @@ var shakesPlaysChars = [
     "title": "King Lear",
     "year": 1605,
     "genre": "Tragedy",
+    "sumM": 22271,
+    "avgM": 1713.15,
+    "sumW": 3965,
+    "avgW": 1321.67,
     "characters": [
       {
         "who": "Albany",
@@ -2287,6 +2355,10 @@ var shakesPlaysChars = [
     "title": "Love's Labour's Lost",
     "year": 1591,
     "genre": "Comedy",
+    "sumM": 17789,
+    "avgM": 1368.38,
+    "sumW": 4709,
+    "avgW": 941.8,
     "characters": [
       {
         "who": "Armado",
@@ -2384,6 +2456,10 @@ var shakesPlaysChars = [
     "title": "Macbeth",
     "year": 1606,
     "genre": "Tragedy",
+    "sumM": 13073,
+    "avgM": 688.05,
+    "sumW": 2648,
+    "avgW": 882.67,
     "characters": [
       {
         "who": "Angus",
@@ -2501,6 +2577,10 @@ var shakesPlaysChars = [
     "title": "Measure for Measure",
     "year": 1604,
     "genre": "Comedy",
+    "sumM": 18807,
+    "avgM": 1175.44,
+    "sumW": 4144,
+    "avgW": 828.8,
     "characters": [
       {
         "who": "Abhorson",
@@ -2613,6 +2693,10 @@ var shakesPlaysChars = [
     "title": "Much Ado about Nothing",
     "year": 1598,
     "genre": "Comedy",
+    "sumM": 17491,
+    "avgM": 1166.07,
+    "sumW": 4567,
+    "avgW": 1141.75,
     "characters": [
       {
         "who": "Antonio",
@@ -2715,6 +2799,10 @@ var shakesPlaysChars = [
     "title": "Othello",
     "year": 1604,
     "genre": "Tragedy",
+    "sumM": 21894,
+    "avgM": 2189.4,
+    "sumW": 5238,
+    "avgW": 1746,
     "characters": [
       {
         "who": "Bianca",
@@ -2787,6 +2875,10 @@ var shakesPlaysChars = [
     "title": "Pericles",
     "year": 1608,
     "genre": "Comedy",
+    "sumM": 13831,
+    "avgM": 987.93
+    "sumW": 3826,
+    "avgW": 546.57,
     "characters": [
       {
         "who": "Antiochus",
@@ -2899,6 +2991,11 @@ var shakesPlaysChars = [
     "title": "Richard II",
     "year": 1595,
     "genre": "History",
+    "sumM": 20910,
+    "avgM": 804.23,
+    "sumW": 2231,
+    "avgW": 743.67,
+
     "characters": [
       {
         "who": "Abbot Of Westminster",
@@ -3051,6 +3148,10 @@ var shakesPlaysChars = [
     "title": "Richard III",
     "year": 1593,
     "genre": "History",
+    "sumM": 22190,
+    "avgM": 652.65,
+    "sumW": 6835,
+    "avgW": 1367,
     "characters": [
       {
         "who": "Archbishop",
@@ -3253,6 +3354,10 @@ var shakesPlaysChars = [
     "title": "Romeo and Juliet",
     "year": 1595,
     "genre": "Tragedy",
+    "sumM": 15715,
+    "avgM": 1208.85,
+    "sumW": 7943,
+    "avgW": 1985.75,
     "characters": [
       {
         "who": "Apothecary",
@@ -3345,6 +3450,10 @@ var shakesPlaysChars = [
     "title": "The Comedy of Errors",
     "year": 1592,
     "genre": "Comedy",
+    "sumM": 12092,
+    "avgM": 1007.67,
+    "sumW": 4100,
+    "avgW": 820,
     "characters": [
       {
         "who": "Abbess",
@@ -3437,6 +3546,10 @@ var shakesPlaysChars = [
     "title": "The Merchant of Venice",
     "year": 1596,
     "genre": "Comedy",
+    "sumM": 15609,
+    "avgM": 1114.93,
+    "sumW": 6464,
+    "avgW": 2154.67,
     "characters": [
       {
         "who": "Antonio",
@@ -3529,6 +3642,10 @@ var shakesPlaysChars = [
     "title": "The Merry Wives of Windsor",
     "year": 1600,
     "genre": "Comedy",
+    "sumM": 16985,
+    "avgM": 943.61,
+    "sumW": 7196,
+    "avgW": 1799,
     "characters": [
       {
         "who": "Anne Page",
@@ -3646,6 +3763,10 @@ var shakesPlaysChars = [
     "title": "The Taming of the Shrew",
     "year": 1594,
     "genre": "Comedy",
+    "sumM": 19301,
+    "avgM": 1206.31,
+    "sumW": 2582,
+    "avgW": 645.5,
     "characters": [
       {
         "who": "Baptista",
@@ -3753,6 +3874,10 @@ var shakesPlaysChars = [
     "title": "The Tempest",
     "year": 1611,
     "genre": "Comedy",
+    "sumM": 16033,
+    "avgM": 1145.21,
+    "sumW": 1082,
+    "avgW": 1082,
     "characters": [
       {
         "who": "Adrian",
@@ -3835,6 +3960,10 @@ var shakesPlaysChars = [
     "title": "The Winter's Tale",
     "year": 1610,
     "genre": "Comedy",
+    "sumM": 18102,
+    "avgM": 1293,
+    "sumW": 5608,
+    "avgW": 934.67,
     "characters": [
       {
         "who": "Antigonus",
@@ -3942,6 +4071,10 @@ var shakesPlaysChars = [
     "title": "Timon of Athens",
     "year": 1607,
     "genre": "Tragedy",
+    "sumM": 13635,
+    "avgM": 1363.5,
+    "sumW": 93,
+    "avgW": 46.5,
     "characters": [
       {
         "who": "Alcibiades",
@@ -4009,6 +4142,10 @@ var shakesPlaysChars = [
     "title": "Titus Andronicus",
     "year": 1594,
     "genre": "Tragedy",
+    "sumM": 18667,
+    "avgM": 1098.06,
+    "sumW": 2731,
+    "avgW": 910.33,
     "characters": [
       {
         "who": "Aaron",
@@ -4116,6 +4253,10 @@ var shakesPlaysChars = [
     "title": "Troilus and Cressida",
     "year": 1602,
     "genre": "Tragedy",
+    "sumM": 24557,
+    "avgM": 1116.23,
+    "sumW": 2979,
+    "avgW": 744.75,
     "characters": [
       {
         "who": "Achilles",
@@ -4253,6 +4394,10 @@ var shakesPlaysChars = [
     "title": "Twelfth Night",
     "year": 1600,
     "genre": "Comedy",
+    "sumM": 14257,
+    "avgM": 1425.7,
+    "sumW": 6675,
+    "avgW": 2225,
     "characters": [
       {
         "who": "Antonio",
@@ -4325,6 +4470,10 @@ var shakesPlaysChars = [
     "title": "Two Gentlemen of Verona",
     "year": 1593,
     "genre": "Comedy",
+    "sumM": 13285,
+    "avgM": 1328.5,
+    "sumW": 4631,
+    "avgW": 1543.67,
     "characters": [
       {
         "who": "Antonio",
@@ -4397,6 +4546,10 @@ var shakesPlaysChars = [
     "title": "Two Noble Kinsmen",
     "year": 1613,
     "genre": "Comedy",
+    "sumM": 15604,
+    "avgM": 1418.55,
+    "sumW": 6715,
+    "avgW": 1678.75,
     "characters": [
       {
         "who": "Arcite",
