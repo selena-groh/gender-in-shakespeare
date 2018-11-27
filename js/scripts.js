@@ -6,8 +6,8 @@ const mapGenreToColor = {'Comedy': '#4CB944', 'History': '#246EB9', 'Tragedy': '
 const genres = [{'genre': 'Comedy', 'color': '#4CB944'}, {'genre': 'History', 'color': '#246EB9'}, {'genre': 'Tragedy', 'color': '#F06543'}];
 
 const svg = d3.select('#timeline svg'),
-    legendMargin = {top: 10, right: 0, bottom: 0, left: 25},
-    margin = {top: 30, right: 30, bottom: 30, left: 25},
+    legendMargin = {top: 30, right: 0, bottom: 0, left: 25},
+    margin = {top: 50, right: 30, bottom: 30, left: 25},
     width = +svg.attr('width') - margin.left - margin.right,
     height = +svg.attr('height') - margin.top - margin.bottom;
 
@@ -65,13 +65,13 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
             const node = d3.select('#' + itemPrefix + d.id + ' .title')
               .transition()
                 .style('fill', function(d) { return mapGenreToColor[d.genre]; })
-                .duration(100);
+                .duration(70);
           })
           .on('mouseout', function(d) {
             const node = d3.select('#' + itemPrefix + d.id + ' .title')
               .transition()
                 .style('fill', 'black')
-                .duration(100);
+                .duration(70);
           });
 
       item.append('text')
