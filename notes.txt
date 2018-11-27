@@ -4,9 +4,9 @@ plays []
   characters []
     name
     gender
-    # lines
+    # words
 
-list of plays and their chronology
+list of plays and their chronology and genre
 # of female characters in each play -- over time
 word count of female characters vs. male per play
 word count of female characters vs. male overall

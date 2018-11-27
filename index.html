@@ -21,9 +21,9 @@
     <h2>Plays and Characters</h2>
   </div>
 
-  <div id='lines'>
+<!--   <div id='lines'>
     <h2>Lines</h2>
-  </div>
+  </div> -->
 
   <script src='js/scripts.js'></script>
   <script src='js/shakes-small.js'></script>
@@ -34,24 +34,35 @@
       console.log(shakesPlaysChars[i]);
     }
 
+    function getCharacters(chars) {
+      const len = chars.length;
+      let charList = '';
+      for (var i = 0; i < len; i++) {
+        console.log(chars[i]);
+        charList = charList + chars[i].who + ' (' + chars[i].wc + '), ';
+      }
+      return charList;
+    }
+
     const playsChars = d3.select('#playsChars');
     playsChars.selectAll('p')
         .data(shakesPlaysChars)
         .enter()
         .append('p')
-          .text(function(d) {return d.title + ' (' + d.year + ') - ' + d.genre;});
+         // + ': ' + getCharacters(d.characters);
+          .text(function(d) {return d.title + ' (' + d.year + ') - ' + d.genre + '  ' + d.characters.length});
 
-    const len = shakes.length;
-    for (var i = 0; i < len/20; i++) {
-      console.log(shakes[i]);
-    }
+    // const len = shakes.length;
+    // for (var i = 0; i < len/20; i++) {
+    //   console.log(shakes[i]);
+    // }
 
-    const lines = d3.select('#lines');
-    lines.selectAll('p')
-        .data(shakes)
-        .enter()
-        .append('p')
-          .text(function(d) {return play[d.play] + ' - ' + d.who + ': ' + d.w;});
+    // const lines = d3.select('#lines');
+    // lines.selectAll('p')
+    //     .data(shakes)
+    //     .enter()
+    //     .append('p')
+    //       .text(function(d) {return play[d.play] + ' - ' + d.who + ': ' + d.w;});
 
   </script>
 </body>
