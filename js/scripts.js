@@ -11,7 +11,15 @@ const svg = d3.select('#timeline svg'),
     width = +svg.attr('width') - margin.left - margin.right,
     height = +svg.attr('height') - margin.top - margin.bottom;
 
+const charsvg = d3.select('#characters svg'),
+    charmargin = {top: 50, right: 30, bottom: 30, left: 25},
+    charwidth = +charsvg.attr('width') - charmargin.left - charmargin.right,
+    charheight = +charsvg.attr('height') - charmargin.top - charmargin.bottom;
+
+
+
 const y = d3.scaleLinear().range([-1, height]);
+
 
 d3.json('data/shakes-plays-chars.json', function(error, data) {
     if (error) throw error;
@@ -98,6 +106,11 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     makeLegend(svg);
     makeTimeline(svg);
 
+  //This is where I start working on the right svg
+    function makechars(parent) {
+	console.log("makin' charssss");
+    }
+    makechars(charsvg);
 });
 
 })();
