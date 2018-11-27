@@ -1,5 +1,6 @@
 var shakesPlaysChars = [
   {
+    "id": "midsummer",
     "title": "A Midsummer Night's Dream",
     "year": 1595,
     "genre": "Comedy",
@@ -92,6 +93,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "allswell",
     "title": "All's Well that Ends Well",
     "year": 1602,
     "genre": "Comedy",
@@ -164,6 +166,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "antcleo",
     "title": "Antony and Cleopatra",
     "year": 1607,
     "genre": "Tragedy",
@@ -341,6 +344,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "ayli",
     "title": "As You Like It",
     "year": 1599,
     "genre": "Comedy",
@@ -443,6 +447,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "corio",
     "title": "Coriolanus",
     "year": 1608,
     "genre": "Tragedy",
@@ -515,6 +520,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "cym",
     "title": "Cymbeline",
     "year": 1609,
     "genre": "Tragedy",
@@ -602,6 +608,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "ham",
     "title": "Hamlet",
     "year": 1601,
     "genre": "Tragedy",
@@ -714,6 +721,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "henry4p1",
     "title": "Henry IV, Part 1",
     "year": 1597,
     "genre": "History",
@@ -1008,6 +1016,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "henry5",
     "title": "Henry V",
     "year": 1599,
     "genre": "History",
@@ -1205,6 +1214,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "henry6p1",
     "title": "Henry VI, Part 1",
     "year": 1592,
     "genre": "History",
@@ -1392,6 +1402,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "henry6p2",
     "title": "Henry VI, Part 2",
     "year": 1591,
     "genre": "History",
@@ -1619,6 +1630,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "henry6p3",
     "title": "Henry VI, Part 3",
     "year": 1591,
     "genre": "History",
@@ -1781,6 +1793,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "henry8",
     "title": "Henry VIII",
     "year": 1613,
     "genre": "History",
@@ -1953,6 +1966,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "jc",
     "title": "Julius Caesar",
     "year": 1599,
     "genre": "Tragedy",
@@ -2080,6 +2094,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "kj",
     "title": "King John",
     "year": 1596,
     "genre": "History",
@@ -2197,6 +2212,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "lear",
     "title": "King Lear",
     "year": 1605,
     "genre": "Tragedy",
@@ -2284,6 +2300,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "lll",
     "title": "Love's Labour's Lost",
     "year": 1591,
     "genre": "Comedy",
@@ -2381,6 +2398,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "mac",
     "title": "Macbeth",
     "year": 1606,
     "genre": "Tragedy",
@@ -2498,6 +2516,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "meas",
     "title": "Measure for Measure",
     "year": 1604,
     "genre": "Comedy",
@@ -2610,6 +2629,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "muchado",
     "title": "Much Ado about Nothing",
     "year": 1598,
     "genre": "Comedy",
@@ -2712,6 +2732,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "oth",
     "title": "Othello",
     "year": 1604,
     "genre": "Tragedy",
@@ -2784,6 +2805,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "peri",
     "title": "Pericles",
     "year": 1608,
     "genre": "Comedy",
@@ -2896,6 +2918,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "rich2",
     "title": "Richard II",
     "year": 1595,
     "genre": "History",
@@ -3048,6 +3071,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "rich3",
     "title": "Richard III",
     "year": 1593,
     "genre": "History",
@@ -3250,6 +3274,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "randj",
     "title": "Romeo and Juliet",
     "year": 1595,
     "genre": "Tragedy",
@@ -3342,6 +3367,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "comerr",
     "title": "The Comedy of Errors",
     "year": 1592,
     "genre": "Comedy",
@@ -3434,6 +3460,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "merch",
     "title": "The Merchant of Venice",
     "year": 1596,
     "genre": "Comedy",
@@ -3526,6 +3553,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "merry",
     "title": "The Merry Wives of Windsor",
     "year": 1600,
     "genre": "Comedy",
@@ -3643,6 +3671,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "taming",
     "title": "The Taming of the Shrew",
     "year": 1594,
     "genre": "Comedy",
@@ -3750,6 +3779,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "tempest",
     "title": "The Tempest",
     "year": 1611,
     "genre": "Comedy",
@@ -3832,6 +3862,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "winters",
     "title": "The Winter's Tale",
     "year": 1610,
     "genre": "Comedy",
@@ -3939,6 +3970,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "timon",
     "title": "Timon of Athens",
     "year": 1607,
     "genre": "Tragedy",
@@ -4006,6 +4038,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "titus",
     "title": "Titus Andronicus",
     "year": 1594,
     "genre": "Tragedy",
@@ -4113,6 +4146,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "troilus",
     "title": "Troilus and Cressida",
     "year": 1602,
     "genre": "Tragedy",
@@ -4250,6 +4284,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "12night",
     "title": "Twelfth Night",
     "year": 1600,
     "genre": "Comedy",
@@ -4322,6 +4357,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "2gentlemen",
     "title": "Two Gentlemen of Verona",
     "year": 1593,
     "genre": "Comedy",
@@ -4394,6 +4430,7 @@ var shakesPlaysChars = [
     ]
   },
   {
+    "id": "2noble",
     "title": "Two Noble Kinsmen",
     "year": 1613,
     "genre": "Comedy",
