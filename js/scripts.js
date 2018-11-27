@@ -103,6 +103,70 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
     makeTimeline();
 
+    function makePlays() {
+      const svg = d3.select('#plays svg'),
+          margin = {top: 20, right: 20, bottom: 30, left: 50},
+          width = +svg.attr('width'),
+          height = +svg.attr('height'),
+          domainwidth = width - margin.left - margin.right,
+          domainheight = height - margin.top - margin.bottom;
+
+      var x = d3.scaleLinear()
+          .domain([-100, 100])
+          .range(padExtent([0, domainwidth]));
+      var y = d3.scaleLinear()
+          .domain([-100, 100])
+          .range(padExtent([domainheight, 0]));
+
+      var g = svg.append("g")
+          .attr("transform", "translate(" + margin.top + "," + margin.top + ")");
+
+      g.append("rect")
+          .attr("width", width - margin.left - margin.right)
+          .attr("height", height - margin.top - margin.bottom)
+          .attr("fill", "none");
+
+      data.forEach(function(d) {
+          d.consequence = +d.consequence;
+          d.value = +d.value;
+          d.deltaSum = percentDifference(d.sumW, d.sumM);
+          d.deltaAvg = percentDifference(d.avgW, d.avgM);
+      });
+
+      g.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + y(0) + ")")
+          .call(d3.axisBottom(x).ticks(10).tickFormat(function(d) { return d === 0 ? '' : Math.abs(d) + '%'; }));
+
+      g.append("g")
+          .attr("class", "y axis")
+          .attr("transform", "translate(" + x(0) + ", 0)")
+          .call(d3.axisRight(y).ticks(10).tickFormat(function(d) { return d === 0 ? '' : Math.abs(d) + '%'; }));
+
+      g.selectAll("circle")
+          .data(data)
+        .enter().append("circle")
+          .attr("class", "dot")
+          .attr('id', function(d) { return d.id; })
+          .attr('deltaAvg', function(d) { return d.deltaAvg; })
+          .attr('deltaSum', function(d) { return d.deltaSum; })
+          .attr("r", 4)
+          .attr("cx", function(d) { return x(d.deltaAvg); })
+          .attr("cy", function(d) { return y(d.deltaSum); })
+          .attr('fill', function(d) { return mapGenreToColor[d.genre]; });
+
+      function padExtent(e, p) {
+          if (p === undefined) p = 1;
+          return ([e[0] - p, e[1] + p]);
+      }
+
+      function percentDifference(a, b) {
+        return (a - b) / (a + b) * 100;
+      }
+    }
+
+    makePlays();
+
 });
 
 })();
