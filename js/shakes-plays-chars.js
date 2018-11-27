@@ -874,7 +874,7 @@ var shakesPlaysChars = [
     "title": "Henry IV, Part 2",
     "year": 1597,
     "genre": "History",
-    "sumM": 23735, 
+    "sumM": 23735,
     "avgM": 791.17,
     "sumW": 2624,
     "avgW": 656,
@@ -1850,7 +1850,7 @@ var shakesPlaysChars = [
     "year": 1613,
     "genre": "History",
     "sumM": 18184,
-    "avgM": 606.13, 
+    "avgM": 606.13,
     "sumW": 4180,
     "avgW": 1393.33,
     "characters": [
@@ -2898,7 +2898,7 @@ var shakesPlaysChars = [
     "year": 1608,
     "genre": "Comedy",
     "sumM": 13831,
-    "avgM": 987.93
+    "avgM": 987.93,
     "sumW": 3826,
     "avgW": 546.57,
     "characters": [
