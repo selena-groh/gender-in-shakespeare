@@ -22,30 +22,34 @@
 
     <div id='center'>
       <div class='header'>
-        <h1>Gender in Shakespeare's Plays</h1>
+        <h1>Gender in Shakespeare</h1>
         <p class='subtitle-left'>by Emily Davis and Selena Groh</p>
-        <p class='subtitle-right'>Tufts University, 2018</p>
+        <!-- <p class='subtitle-right'>Tufts University, 2018</p> -->
       </div>
       <div id='plays'>
-        <svg width='600' height='600'></svg>
+        <svg width='200' height='200'></svg>
       </div>
+      <p class='sources'>Sources: <a href='https://github.com/duhaime/mining_the_bard'>Mining the Bard</a>, <a href='https://www.dummies.com/education/literature/shakespeares-plays/'>Play Summaries</a></p>
     </div>
 
     <div id='left'>
       <div id='timeline'>
-        <svg width='275' height='710'></svg>
+        <svg width='260' height='700'></svg>
       </div>
     </div>
 
     <div id='right'>
-      <div id='characters'>
-	      <svg width='275' height='600'></svg>
+      <h3 id='instructions'>Select a play for details</h3>
+      <div id='characters' class='hidden'>
+        <h2 id='playTitle'></h2>
+        <p id='playInfo'></p>
+        <p id='playSummary'></p>
+        <p id='playCharBreakdown'></p>
+	      <svg width='300' height='500'></svg>
       </div>
     </div>
   </div>
 
-  <script src='js/shakes-plays-chars.js'></script>
-  <script src='js/play-abbrev.js'></script>
   <script src='js/scripts.js'></script>
 </body>
 </html>

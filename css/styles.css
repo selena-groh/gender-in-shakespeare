@@ -1,24 +1,47 @@
 html, body {
   font-family: 'Lato', 'Helvetica', sans-serif;
   margin: 0;
+  height: 100%;
+}
+
+.hidden {
+  display: none;
 }
 
 #container {
   display: flex;
   flex-direction: column;
+  min-height: 100%;
+}
+
+#left {
+  height: 700px;
 }
 
 #center {
   text-align: center;
+  display: flex;
+  flex-flow: column;
+  min-height: 100vh;
+}
+
+.header {
+  max-height: 95px;
+}
+
+#plays {
+  flex: 1;
+  overflow: auto;
 }
 
 #right {
-  min-height: 200px;
+  /*min-height: 200px;*/
   display: flex;
-  align-items: center;
+  flex-flow: column;
+  justify-content: center;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 930px) {
   #container {
     flex-direction: row;
     flex: 1;
@@ -26,29 +49,33 @@ html, body {
 
   #left {
     order: -1;
+    min-height: 100%;
+    height: auto;
   }
 
   #center {
     flex: 1;
   }
 
-  #left, #right {
-    /* 12em is the width of the columns */
-    flex: 0 0 275px;
+  #left {
+    flex: 0 0 260px;
+  }
+
+  #right {
+    flex: 0 0 300px;
   }
 }
 
 h1 {
-  font-family: 'Charmonman', cursive;
-  text-align: center;
   font-size: 2.3rem;
   margin: 1rem;
-  margin-bottom: 0;
   white-space: nowrap;
 }
 
-.header {
-  max-height: 80px;
+h1, h2, h3 {
+  font-family: 'Charmonman', cursive;
+  text-align: center;
+  margin-bottom: 0;
 }
 
 [class^=subtitle] {
@@ -59,7 +86,7 @@ h1 {
 }
 
 .subtitle-left {
-  left: -97px;
+  left: -37px;
   position: relative;
   top: -20px;
 }
@@ -94,15 +121,20 @@ h1 {
   letter-spacing: 0.05rem;
 }
 
-/*#timeline svg {
-  min-height: 710px;
-}*/
+#timeline {
+  height: 100%;
+}
+
+#timeline svg {
+  display: block;
+  margin: auto;
+}
 
 #timeline .year {
   font-size: 0.8rem;
 }
 
-#timeline .title {
+#timeline .title, .legend-item {
   font-size: 0.9rem;
 }
 
@@ -110,12 +142,12 @@ h1 {
   background: #EEE;
   border-radius: 5px;
   display: none;
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   opacity: 0;
   padding: 5px;
   position: absolute;
   text-align: center;
-  width: 225px;
+  width: 300px;
 }
 
 span.title {
@@ -123,7 +155,7 @@ span.title {
 }
 
 span.avgVsSum {
-  font-size: 0.6rem;
+  font-size: 0.8rem;
 }
 
 .male {
@@ -134,4 +166,27 @@ span.avgVsSum {
 .female {
   color: #EC3E5B;
   fill: #EC3E5B;
+}
+
+#characters p {
+  font-size: 0.8rem;
+  margin: 0.5rem;
+}
+
+#playInfo {
+  text-align: center;
+}
+
+.sources {
+  font-size: 0.7rem;
+  color: #999;
+}
+
+.sources a {
+  text-decoration: none;
+  color: #999;
+}
+
+.sources a:hover, .sources a:focus {
+  text-decoration: underline;
 }
