@@ -1,5 +1,6 @@
 (function () {
 
+
 const itemPrefix = 'timeline-';
 const playPrefix = 'play-';
 
@@ -370,6 +371,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
   if (currentPlayId === '') { return; }
 
+
 	var myplay = data.find(x => x.id === currentPlayId);
 
 	var charset = myplay.characters;
@@ -403,9 +405,6 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 	    .data(charset)
 	    .enter()
 	    .append("rect")
-	    //.attr("x", function(d) {
-	    //    return yScaler(d.who);
-	    // })
 	    .attr("y", function(d) {
 	        return yScaler(d.who);
   	     })
@@ -419,15 +418,28 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
  		} else {
 		    return colorW;
 		}
-	      });
-
-	//var x_axis = barChart.append("g")
-	  //  		.attr("transform", "translate(0, " + charheight + ")")
-	    //		.call(d3.axisBottom(xScaler));
+	      })
+	    .on("mouseover", handleMouseover)
+	    .on("mouseout", handleMouseout);
 
 	var y_axis = barChart.append("g")
 			.call(d3.axisLeft(yScaler).tickSize(0));
 	y_axis.select(".domain").remove();
+
+
+	function handleMouseover(d) {
+	    
+	    barChart.selectAll("rect")
+		    .attr("opacity", .5);
+
+	    d3.select(this).attr("opacity", 1);
+	}
+
+	function handleMouseout(d) {
+	    console.log("we've mouse outted");
+	    barChart.selectAll("rect")
+		    .attr("opacity", 1);
+	}
     }
 });
 
