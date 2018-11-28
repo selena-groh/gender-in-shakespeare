@@ -351,13 +351,13 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 		}
 	      });
 
-	var x_axis = barChart.append("g")
-	    		.attr("transform", "translate(0, " + charheight + ")")
-	    		.call(d3.axisBottom(xScaler));
+	//var x_axis = barChart.append("g")
+	  //  		.attr("transform", "translate(0, " + charheight + ")")
+	    //		.call(d3.axisBottom(xScaler));
 
 	var y_axis = barChart.append("g")
-			.call(d3.axisLeft(yScaler).ticks(10));
-
+			.call(d3.axisLeft(yScaler).tickSize(0));
+	y_axis.select(".domain").remove();
     }
     makechars(charsvg);
 });
