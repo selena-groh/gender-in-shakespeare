@@ -34,7 +34,7 @@ html, body {
 
   #left, #right {
     /* 12em is the width of the columns */
-    flex: 0 0 300px;
+    flex: 0 0 275px;
   }
 }
 

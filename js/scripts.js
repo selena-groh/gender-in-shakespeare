@@ -117,7 +117,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
       const plays = d3.select('#plays'),
         svg = plays.select('svg'),
-        margin = {top: 40, right: 30, bottom: 30, left: 30},
+        margin = {top: 40, right: 20, bottom: 30, left: 20},
         width = +svg.attr('width'),
         height = +svg.attr('height'),
         domainwidth = width - margin.left - margin.right,
@@ -304,7 +304,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
 	var charset = myplay.characters;
 	charset = charset.sort(function (a, b) {
-		return d3.descending(a.wc, b.wc); 
+		return d3.descending(a.wc, b.wc);
 	 });
 
 	var numchars = myplay.characters.length;
