@@ -303,6 +303,10 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 	var myplay = data.find(x => x.id === 'midsummer');
 
 	var charset = myplay.characters;
+	charset = charset.sort(function (a, b) {
+		return d3.descending(a.wc, b.wc); 
+	 });
+
 	var numchars = myplay.characters.length;
 
 	//var barPadding = 5;
@@ -312,13 +316,13 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
 	var gap = 0.2;
 
-	let xScaler = d3.scaleBand()
-	        .rangeRound([0, charwidth])
+	let yScaler = d3.scaleBand()
+	        .rangeRound([0, charheight])
 		.padding(gap)
 		.domain(charset.map(function(d){ return d.who;
 		 }));
-	let yScaler = d3.scaleLinear()
-		.rangeRound([charheight,0])
+	let xScaler = d3.scaleLinear()
+		.rangeRound([0, charwidth])
 		.domain([0, d3.max(charset.map(function(d){ return d.wc;
 		 }))]);
 
@@ -329,17 +333,23 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 	    .data(charset)
 	    .enter()
 	    .append("rect")
-	    .attr("x", function(d) {
-	        return xScaler(d.who);
-	     })
+	    //.attr("x", function(d) {
+	    //    return yScaler(d.who);
+	    // })
 	    .attr("y", function(d) {
-	        return yScaler(+d.wc);
+	        return yScaler(d.who);
   	     })
-	    .attr("width", xScaler.bandwidth())
-	    .attr("height", function(d) {
-	        return charheight - yScaler(+d.wc);
+	    .attr("height", yScaler.bandwidth())
+	    .attr("width", function(d) {
+	        return xScaler(+d.wc);
 	     })
-	    .attr("fill", "teal");
+	    .attr("fill", function(d) {
+		if (d.gender == 'male') {
+		    return colorM;
+ 		} else {
+		    return colorW;
+		}
+	      });
 
 	var x_axis = barChart.append("g")
 	    		.attr("transform", "translate(0, " + charheight + ")")
