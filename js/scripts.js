@@ -1,32 +1,14 @@
 (function () {
 
-<<<<<<< HEAD
-const circleRadius = 4;
-const timelineOffset = 35;
-const mapGenreToColor = {'Comedy': '#4CB944', 'History': '#246EB9', 'Tragedy': '#F06543'};
-const genres = [{'genre': 'Comedy', 'color': '#4CB944'}, {'genre': 'History', 'color': '#246EB9'}, {'genre': 'Tragedy', 'color': '#F06543'}];
-
-const svg = d3.select('#timeline svg'),
-    legendMargin = {top: 30, right: 0, bottom: 0, left: 25},
-    margin = {top: 50, right: 30, bottom: 30, left: 25},
-    width = +svg.attr('width') - margin.left - margin.right,
-    height = +svg.attr('height') - margin.top - margin.bottom;
-
 const charsvg = d3.select('#characters svg'),
     charmargin = {top: 50, right: 30, bottom: 30, left: 25},
     charwidth = +charsvg.attr('width') - charmargin.left - charmargin.right,
     charheight = +charsvg.attr('height') - charmargin.top - charmargin.bottom;
 
-
-
-const y = d3.scaleLinear().range([-1, height]);
-=======
 const mapGenreToColor = {'Comedy': '#4CB944', 'History': '#AF4DA4', 'Tragedy': '#F47835'};
 const genres = [{'genre': 'Comedy', 'color': '#4CB944'}, {'genre': 'History', 'color': '#AF4DA4'}, {'genre': 'Tragedy', 'color': '#F47835'}];
 const colorM = '#08B2E3',
   colorW = '#EC3E5B';
->>>>>>> aa1656107d8aab0a1ab32ab5c71f251a3e97c205
-
 
 d3.json('data/shakes-plays-chars.json', function(error, data) {
     if (error) throw error;
@@ -39,7 +21,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
       const svg = d3.select('#timeline svg'),
           legendMargin = {top: 30, right: 0, bottom: 0, left: 25},
-          margin = {top: 50, right: 30, bottom: 20, left: 25},
+          margin = {top: 50, right: 30, bottom: 30, left: 25},
           width = +svg.attr('width') - margin.left - margin.right,
           height = +svg.attr('height') - margin.top - margin.bottom;
 
@@ -290,7 +272,56 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
   //This is where I start working on the right svg
     function makechars(parent) {
-	console.log("makin' charssss");
+	
+	var playid = "midsummer";
+	var myplay = data.find(x => x.id === 'midsummer');
+
+	var charset = myplay.characters;
+	var numchars = myplay.characters.length;
+
+	//var barPadding = 5;
+	//var barWidth = (charsvg.attr("width") / numchars);
+	//console.log("the width is " + barWidth);
+
+
+	var gap = 0.2;
+
+	let xScaler = d3.scaleBand()
+	        .rangeRound([0, charwidth])
+		.padding(gap)
+		.domain(charset.map(function(d){ console.log(d.who); return d.id;
+		 }));
+	let yScaler = d3.scaleLinear()
+		.rangeRound([charheight,0])
+		.domain([0, d3.max(charset.map(function(d){ console.log(d.wc); return d.wc;
+		 }))]);
+
+        var barChart = charsvg.append("g")
+                        .attr("transform", "translate(50, 50)");
+
+	barChart.selectAll("rect")
+	    .data(charset)
+	    .enter()
+	    .append("rect")
+	    .attr("x", function(d) {
+	        return xScaler(d.who);
+	     })
+	    .attr("y", function(d) {
+	        return yScaler(+d.wc); 
+  	     })
+	    .attr("width", xScaler.bandwidth())
+	    .attr("height", function(d) {
+	        return charheight - yScaler(+d.wc);
+	     })
+	    .attr("fill", "teal");
+
+	var x_axis = barChart.append("g")
+	    		.attr("transform", "translate(0, " + charheight + ")")
+	    		.call(d3.axisBottom(xScaler));
+
+	var y_axis = barChart.append("g")
+			.call(d3.axisLeft(yScaler).ticks(10));
+
     }
     makechars(charsvg);
 });
