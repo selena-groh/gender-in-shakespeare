@@ -13,8 +13,9 @@ html, body {
 }
 
 #right {
-  background: blue;
   min-height: 200px;
+  display: flex;
+  align-items: center;
 }
 
 @media (min-width: 768px) {

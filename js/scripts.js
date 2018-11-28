@@ -21,7 +21,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
       const svg = d3.select('#timeline svg'),
           legendMargin = {top: 30, right: 0, bottom: 0, left: 25},
-          margin = {top: 50, right: 30, bottom: 30, left: 25},
+          margin = {top: 50, right: 30, bottom: 20, left: 25},
           width = +svg.attr('width') - margin.left - margin.right,
           height = +svg.attr('height') - margin.top - margin.bottom;
 
@@ -272,7 +272,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
   //This is where I start working on the right svg
     function makechars(parent) {
-	
+
 	var playid = "midsummer";
 	var myplay = data.find(x => x.id === 'midsummer');
 
@@ -289,11 +289,11 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 	let xScaler = d3.scaleBand()
 	        .rangeRound([0, charwidth])
 		.padding(gap)
-		.domain(charset.map(function(d){ console.log(d.who); return d.id;
+		.domain(charset.map(function(d){ return d.who;
 		 }));
 	let yScaler = d3.scaleLinear()
 		.rangeRound([charheight,0])
-		.domain([0, d3.max(charset.map(function(d){ console.log(d.wc); return d.wc;
+		.domain([0, d3.max(charset.map(function(d){ return d.wc;
 		 }))]);
 
         var barChart = charsvg.append("g")
@@ -307,7 +307,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 	        return xScaler(d.who);
 	     })
 	    .attr("y", function(d) {
-	        return yScaler(+d.wc); 
+	        return yScaler(+d.wc);
   	     })
 	    .attr("width", xScaler.bandwidth())
 	    .attr("height", function(d) {
