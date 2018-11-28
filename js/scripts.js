@@ -277,6 +277,10 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 	var myplay = data.find(x => x.id === 'midsummer');
 
 	var charset = myplay.characters;
+	charset = charset.sort(function (a, b) {
+		return d3.ascending(a.wc, b.wc); 
+	 });
+
 	var numchars = myplay.characters.length;
 
 	//var barPadding = 5;
