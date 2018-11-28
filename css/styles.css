@@ -1,28 +1,6 @@
-html, * {
+html, body {
   font-family: 'Lato', 'Helvetica', sans-serif;
   margin: 0;
-}
-
-h1 {
-  font-family: 'Charmonman', cursive;
-  text-align: center;
-  font-size: 2.3rem;
-  margin: 1rem;
-}
-
-.axis {
-  font: 10px sans-serif;
-}
-
-.axis path {
-  fill: none;
-  stroke: #D4D8DA;
-  stroke-width: 2px;
-  shape-rendering: crispEdges;
-}
-
-.year {
-  font-size: 0.8rem;
 }
 
 #container {
@@ -57,4 +35,83 @@ h1 {
     /* 12em is the width of the columns */
     flex: 0 0 300px;
   }
+}
+
+h1 {
+  font-family: 'Charmonman', cursive;
+  text-align: center;
+  font-size: 2.3rem;
+  margin: 1rem;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.header {
+  max-height: 80px;
+}
+
+.subtitle {
+  color: #999;
+  display: inline-block;
+  font-family: 'Charmonman', cursive;
+  left: -97px;
+  margin: 0px;
+  position: relative;
+  top: -20px;
+}
+
+.axis {
+  font-size: 0.6rem;
+}
+
+.axis path {
+  fill: none;
+  stroke: #D4D8DA;
+  stroke-width: 2px;
+  shape-rendering: crispEdges;
+}
+
+.axis-label {
+  font-size: 0.8rem;
+  fill: #999;
+}
+
+/*#timeline svg {
+  min-height: 710px;
+}*/
+
+#timeline .year {
+  font-size: 0.8rem;
+}
+
+#timeline .title {
+  font-size: 0.9rem;
+}
+
+#plays div.tooltip {
+  background: #EEE;
+  border-radius: 5px;
+  display: none;
+  font-size: 0.7rem;
+  opacity: 0;
+  padding: 5px;
+  position: absolute;
+  text-align: center;
+  width: 225px;
+}
+
+span.title {
+  display: block;
+}
+
+span.avgVsSum {
+  font-size: 0.6rem;
+}
+
+.male {
+  color: #08B2E3;
+}
+
+.female {
+  color: #EC3E5B;
 }
