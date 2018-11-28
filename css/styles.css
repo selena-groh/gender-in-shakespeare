@@ -51,14 +51,23 @@ h1 {
   max-height: 80px;
 }
 
-.subtitle {
+[class^=subtitle] {
   color: #999;
-  display: inline-block;
+  display: block;
   font-family: 'Charmonman', cursive;
-  left: -97px;
   margin: 0px;
+}
+
+.subtitle-left {
+  left: -97px;
   position: relative;
   top: -20px;
+}
+
+.subtitle-right {
+  left: 105px;
+  position: relative;
+  top: -51px;
 }
 
 .axis {
@@ -72,9 +81,17 @@ h1 {
   shape-rendering: crispEdges;
 }
 
+.axis-label, .axis-direction {
+  fill: #999;
+}
+
 .axis-label {
   font-size: 0.8rem;
-  fill: #999;
+}
+
+.axis-direction {
+  font-size: 0.7rem;
+  letter-spacing: 0.05rem;
 }
 
 /*#timeline svg {
@@ -111,8 +128,10 @@ span.avgVsSum {
 
 .male {
   color: #08B2E3;
+  fill: #08B2E3;
 }
 
 .female {
   color: #EC3E5B;
+  fill: #EC3E5B;
 }

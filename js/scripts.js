@@ -160,10 +160,23 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           parent.append('text')
             .attr('class', 'axis-label')
             .attr('transform',
-                  'translate(' + x(-100) + ' ,' +
-                                 y(5) + ')')
-            .style('text-anchor', 'Left')
+                  'translate(' + x(-100) + ' ,' + y(5) + ')')
+            .style('text-anchor', 'start')
             .text('Average Word Count Difference');
+
+          parent.append('text')
+            .attr('class', 'axis-direction male')
+            .attr('transform',
+                  'translate(' + x(-100) + ' ,' + y(-15) + ')')
+            .style('text-anchor', 'start')
+            .text('\u27F5 more male');
+
+          parent.append('text')
+            .attr('class', 'axis-direction female')
+            .attr('transform',
+                  'translate(' + x(100) + ' ,' + y(-15) + ')')
+            .style('text-anchor', 'end')
+            .text('more female \u27F6');
         }
 
         function makeYAxis(parent) {
@@ -175,10 +188,23 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           parent.append('text')
             .attr('class', 'axis-label')
             .attr('transform',
-                  'translate(' + x(0) + ' ,' +
-                                 y(105) + ')')
+                  'translate(' + x(0) + ' ,' + y(105) + ')')
             .style('text-anchor', 'middle')
             .text('Total Word Count Difference');
+
+          parent.append('text')
+            .attr('class', 'axis-direction female')
+            .attr('transform',
+                  'translate(' + x(-5) + ' ,' + y(100) + ') rotate(-90)')
+            .style('text-anchor', 'end')
+            .text('more female \u27F6');
+
+          parent.append('text')
+            .attr('class', 'axis-direction male')
+            .attr('transform',
+                  'translate(' + x(-5) + ' ,' + y(-100) + ') rotate(-90)')
+            .style('text-anchor', 'start')
+            .text('\u27F5 more male');
         }
 
         parent.selectAll('.tick text')
