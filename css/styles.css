@@ -98,7 +98,7 @@ h1, h2, h3 {
 }
 
 .axis {
-  font-size: 0.6rem;
+  font-size: 0.7rem;
 }
 
 .axis path {
@@ -159,13 +159,13 @@ span.avgVsSum {
 }
 
 .male {
-  color: #08B2E3;
-  fill: #08B2E3;
+  color: #66C4BF;
+  fill: #66C4BF;
 }
 
 .female {
-  color: #EC3E5B;
-  fill: #EC3E5B;
+  color: #DD5478;
+  fill: #DD5478;
 }
 
 #characters p {

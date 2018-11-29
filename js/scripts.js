@@ -12,10 +12,10 @@ const charsvg = d3.select('#characters svg'),
     charwidth = +charsvg.attr('width') - charmargin.left - charmargin.right,
     charheight = +charsvg.attr('height') - charmargin.top - charmargin.bottom;
 
-const mapGenreToColor = {'Comedy': '#4CB944', 'History': '#AF4DA4', 'Tragedy': '#F47835'};
-const genres = [{'genre': 'Comedy', 'color': '#4CB944'}, {'genre': 'History', 'color': '#AF4DA4'}, {'genre': 'Tragedy', 'color': '#F47835'}];
-const colorM = '#08B2E3',
-  colorW = '#EC3E5B';
+const mapGenreToColor = {'Comedy': '#BDDD73', 'History': '#F7A278', 'Tragedy': '#7484AA'};
+const genres = [{'genre': 'Comedy', 'color': '#BDDD73'}, {'genre': 'History', 'color': '#F7A278'}, {'genre': 'Tragedy', 'color': '#7484AA'}];
+const colorM = '#66C4BF',
+  colorW = '#DD5478';
 
 let currentPlayId = '';
 
@@ -422,7 +422,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 	    .on("mouseover", handleMouseover)
 	    .on("mouseout", handleMouseout);
 
-	
+
 	var fontsize = yScaler.bandwidth()/2;
 
 	barChart.selectAll("text")
@@ -449,7 +449,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 	     .style("fill", function(d) {
                 var rlength = d3.selectAll("rect").filter(function(n) {return n === d;}).attr("width");
                 var textlength = this.getComputedTextLength();
-		
+
 		if ((textlength + 5) >= rlength) {
 		    if (d.gender == 'male') {
 			return colorM;
@@ -457,10 +457,10 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 		    return colorW;
 		}
 		return 'white';})
-	    .style("opacity", 0);	
-		
-		
-	
+	    .style("opacity", 0);
+
+
+
 	var y_axis = barChart.append("g")
 			.call(d3.axisLeft(yScaler).tickSize(0));
 	y_axis.select(".domain").remove();
@@ -472,12 +472,12 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 	// 3) listing the numbers doesn't scale well when there are a lot of characters
 
 	function handleMouseover(d) {
-	    
+
 	    barChart.selectAll("rect")
 		    .attr("opacity", .5);
 
 	    d3.select(this).attr("opacity", 1);
-	   
+
 	    d3.selectAll(".nums").filter(function(n) {return n === d;}).style("opacity", 1);
 	}
 
