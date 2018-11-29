@@ -422,10 +422,54 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 	    .on("mouseover", handleMouseover)
 	    .on("mouseout", handleMouseout);
 
+	
+	var fontsize = yScaler.bandwidth()/2;
+
+	barChart.selectAll("text")
+	    .data(charset)
+	    .enter()
+	    .append("text")
+	    .attr("class", "nums")
+            .attr("y", function(d) {
+                return yScaler(d.who) + (.75 * yScaler.bandwidth());
+             })
+
+	    .style("font-size", fontsize)
+	    .text(function(d) {
+		return d.wc})
+            .attr("x", function(d) {
+                var rlength = d3.selectAll("rect").filter(function(n) {return n === d;}).attr("width");
+                var textlength = this.getComputedTextLength();
+
+                if ((textlength + 5) >= rlength) {
+                    return (xScaler(+d.wc) + 5);
+                }
+
+                 return (xScaler(+d.wc) - (textlength) - 5);})
+	     .style("fill", function(d) {
+                var rlength = d3.selectAll("rect").filter(function(n) {return n === d;}).attr("width");
+                var textlength = this.getComputedTextLength();
+		
+		if ((textlength + 5) >= rlength) {
+		    if (d.gender == 'male') {
+			return colorM;
+		    }
+		    return colorW;
+		}
+		return 'white';})
+	    .style("opacity", 0);	
+		
+		
+	
 	var y_axis = barChart.append("g")
 			.call(d3.axisLeft(yScaler).tickSize(0));
 	y_axis.select(".domain").remove();
 
+
+	//THINGS TO NOTE
+	// 1) hovering over the text hides the text
+	// 2) character names are still getting cut off
+	// 3) listing the numbers doesn't scale well when there are a lot of characters
 
 	function handleMouseover(d) {
 	    
@@ -433,12 +477,15 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 		    .attr("opacity", .5);
 
 	    d3.select(this).attr("opacity", 1);
+	   
+	    d3.selectAll(".nums").filter(function(n) {return n === d;}).style("opacity", 1);
 	}
 
 	function handleMouseout(d) {
-	    console.log("we've mouse outted");
 	    barChart.selectAll("rect")
 		    .attr("opacity", 1);
+	    barChart.selectAll(".nums")
+		    .style("opacity", 0);
 	}
     }
 });
