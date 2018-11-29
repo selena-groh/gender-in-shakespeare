@@ -386,7 +386,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 	//console.log("the width is " + barWidth);
 
 
-	var gap = 0.2;
+	var gap = 0;
 
 	let yScaler = d3.scaleBand()
 	        .rangeRound([0, charheight])
@@ -419,6 +419,8 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 		    return colorW;
 		}
 	      })
+	     .attr("stroke", "white")
+	     .attr("stroke-width", "1")
 	    .on("mouseover", handleMouseover)
 	    .on("mouseout", handleMouseout);
 
