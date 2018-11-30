@@ -149,7 +149,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           .attr('transform',
                 'translate(' + x + ' ,' + y(65) + ')')
           .style('text-anchor', 'middle')
-          .text('Difference in Total Word Count Overall');
+          .text('Difference in Total Words Overall');
       }
 
       function makeAverageAxis(parent, x) {
@@ -163,7 +163,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           .attr('transform',
                 'translate(' + x + ' ,' + y(65) + ')')
           .style('text-anchor', 'middle')
-          .text('Difference in Average Word Count per Role');
+          .text('Difference in Average Words per Role');
       }
 
       parent.append('text')
@@ -309,7 +309,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           .attr('transform',
                 'translate(' + x(-100) + ' ,' + y(5) + ')')
           .style('text-anchor', 'start')
-          .text('Difference in Average Word Count per Role');
+          .text('Difference in Average Words per Role');
 
         parent.append('text')
           .attr('class', 'axis-direction male')
@@ -330,14 +330,14 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           .attr('transform',
                 'translate(' + x(-60) + ' ,' + y(-47) + ')')
           .style('text-anchor', 'middle')
-          .text('Male roles have more words');
+          .text('Males have more words');
 
         parent.append('text')
           .attr('class', 'axis-direction')
           .attr('transform',
                 'translate(' + x(-60) + ' ,' + y(-53) + ')')
           .style('text-anchor', 'middle')
-          .text('total and on average');
+          .text('total and per role');
       }
 
       function makeYAxis(parent) {
@@ -351,7 +351,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           .attr('transform',
                 'translate(' + x(0) + ' ,' + y(105) + ')')
           .style('text-anchor', 'middle')
-          .text('Difference in Total Word Count Overall');
+          .text('Difference in Total Words Overall');
 
         parent.append('text')
           .attr('class', 'axis-direction female')
@@ -372,14 +372,14 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           .attr('transform',
                 'translate(' + x(60) + ' ,' + y(53) + ')')
           .style('text-anchor', 'middle')
-          .text('Female roles have more words');
+          .text('Females have more words');
 
         parent.append('text')
           .attr('class', 'axis-direction')
           .attr('transform',
                 'translate(' + x(60) + ' ,' + y(47) + ')')
           .style('text-anchor', 'middle')
-          .text('total and on average');
+          .text('total and per role');
       }
 
       parent.selectAll('.tick text')
