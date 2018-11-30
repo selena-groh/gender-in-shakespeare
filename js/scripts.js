@@ -29,15 +29,15 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     const timelineOffset = 35;
 
     const timeline = d3.select('#timeline'),
-        svg = timeline.select('svg'),
-        legendMargin = {top: 30, right: 0, bottom: 0, left: 25},
-        margin = {top: 50, right: 30, bottom: 20, left: 25};
+      svg = timeline.select('svg'),
+      legendMargin = {top: 30, right: 0, bottom: 0, left: 25},
+      margin = {top: 50, right: 30, bottom: 20, left: 25};
 
     svg.attr('width', '260');
     svg.attr('height', timeline.node().clientHeight);
 
     const width = svg.attr('width') - margin.left - margin.right,
-        height = svg.attr('height') - margin.top - margin.bottom;
+      height = svg.attr('height') - margin.top - margin.bottom;
 
     function makeLegend(parent) {
       const legend = parent.append('g')
@@ -50,15 +50,15 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           .attr('class', 'legend-item');
 
       legendItem.append('circle')
-          .attr('r', circleRadius + 1)
-          .attr('cx', function(d, i) { return i * 75; })
-          .attr('cy', function(d, i) { return 0; })
-          .attr('fill', function(d) { return mapGenreToColor[d.genre]; });
+        .attr('r', circleRadius + 1)
+        .attr('cx', function(d, i) { return i * 75; })
+        .attr('cy', function(d, i) { return 0; })
+        .attr('fill', function(d) { return mapGenreToColor[d.genre]; });
 
       legendItem.append('text')
-          .attr('x', function(d, i) { return i * 75 + 10; })
-          .attr('y', function(d) { return 5; })
-          .text(function(d) { return d.genre });
+        .attr('x', function(d, i) { return i * 75 + 10; })
+        .attr('y', function(d) { return 5; })
+        .text(function(d) { return d.genre });
     }
 
     function makeLine(parent) {
@@ -89,24 +89,24 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           .on('click', handleClick);
 
       item.append('text')
-          .attr('class', 'year')
-          .attr('x', function(d) { return timelineOffset - 40; })
-          .attr('y', function(d, i) { return y(i) + 4.5; })
-          .attr('visibility', function(d, i) { return data[i-1] && data[i-1].year === d.year ? 'hidden' : 'visible'; })
-          .text(function(d, i) { return d.year; });
+        .attr('class', 'year')
+        .attr('x', function(d) { return timelineOffset - 40; })
+        .attr('y', function(d, i) { return y(i) + 4.5; })
+        .attr('visibility', function(d, i) { return data[i-1] && data[i-1].year === d.year ? 'hidden' : 'visible'; })
+        .text(function(d, i) { return d.year; });
 
       item.append('circle')
-          .attr('data', function(d) { return d.year; })
-          .attr('r', circleRadius)
-          .attr('cx', function(d) { return timelineOffset; })
-          .attr('cy', function(d, i) { return y(i); })
-          .attr('fill', function(d) { return mapGenreToColor[d.genre]; });
+        .attr('data', function(d) { return d.year; })
+        .attr('r', circleRadius)
+        .attr('cx', function(d) { return timelineOffset; })
+        .attr('cy', function(d, i) { return y(i); })
+        .attr('fill', function(d) { return mapGenreToColor[d.genre]; });
 
       item.append('text')
-          .attr('class', 'title')
-          .attr('x', function(d) { return timelineOffset + 10; })
-          .attr('y', function(d, i) { return y(i) + 5.5; })
-          .text(function(d) { return d.title; });
+        .attr('class', 'title')
+        .attr('x', function(d) { return timelineOffset + 10; })
+        .attr('y', function(d, i) { return y(i) + 5.5; })
+        .text(function(d) { return d.title; });
     }
 
     makeLegend(svg);
@@ -152,6 +152,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .range(padExtent([domainheight, 0]));
 
     makeAxes(g);
+
     function makeAxes(parent) {
       makeYAxis(parent);
       makeXAxis(parent);
@@ -248,7 +249,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     }
 
     g.selectAll('circle')
-        .data(data)
+      .data(data)
       .enter().append('circle')
         .attr('class', 'dot')
         .attr('id', function(d) { return playPrefix + d.id; })
@@ -392,132 +393,105 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     return Math.round(Math.abs(a)) + '%';
   }
 
-  //This is where I start working on the right svg
   function makechars(parent) {
 
-  parent.selectAll("*").remove();
+    parent.selectAll("*").remove();
 
-  if (currentPlayId === '') { return; }
+    if (currentPlayId === '') { return; }
 
+    var myplay = data.find(x => x.id === currentPlayId);
 
-	var myplay = data.find(x => x.id === currentPlayId);
+    var charset = myplay.characters;
+    charset = charset.sort(function (a, b) {
+      return d3.descending(a.wc, b.wc);
+    });
 
-	var charset = myplay.characters;
-	charset = charset.sort(function (a, b) {
-		return d3.descending(a.wc, b.wc);
-	 });
+    var numchars = myplay.characters.length;
 
-	var numchars = myplay.characters.length;
+    var gap = 0;
 
-	//var barPadding = 5;
-	//var barWidth = (charsvg.attr("width") / numchars);
-	//console.log("the width is " + barWidth);
+    let yScaler = d3.scaleBand()
+      .rangeRound([0, charheight])
+      .padding(gap)
+      .domain(charset.map(function(d) { return d.who; }));
+    let xScaler = d3.scaleLinear()
+      .rangeRound([0, charwidth])
+      .domain([0, d3.max(charset.map(function(d) { return d.wc; }))]);
 
+    var barChart = charsvg.append("g")
+      .attr("transform", "translate(50, 0)");
 
-	var gap = 0;
+    barChart.selectAll("rect")
+      .data(charset)
+      .enter()
+      .append("rect")
+      .attr("y", function(d) { return yScaler(d.who); })
+      .attr("height", yScaler.bandwidth())
+      .attr("width", function(d) { return xScaler(+d.wc); })
+      .attr("fill", function(d) { return d.gender == 'male' ? colorM : colorW; })
+      .attr("stroke", "white")
+      .attr("stroke-width", "1")
+      .on("mouseover", handleMouseover)
+      .on("mouseout", handleMouseout);
 
-	let yScaler = d3.scaleBand()
-	        .rangeRound([0, charheight])
-		.padding(gap)
-		.domain(charset.map(function(d){ return d.who;
-		 }));
-	let xScaler = d3.scaleLinear()
-		.rangeRound([0, charwidth])
-		.domain([0, d3.max(charset.map(function(d){ return d.wc;
-		 }))]);
+    var fontsize = yScaler.bandwidth() / 2;
 
-        var barChart = charsvg.append("g")
-                        .attr("transform", "translate(50, 0)");
+    barChart.selectAll("text")
+      .data(charset)
+      .enter()
+        .append("text")
+        .attr("class", "nums")
+        .attr("y", function(d) { return yScaler(d.who) + (.75 * yScaler.bandwidth()); })
+        .style("font-size", fontsize)
+        .text(function(d) { return d.wc; })
+        .attr("x", function(d) {
+          var rlength = d3.selectAll("rect")
+            .filter(function(n) { return n === d; })
+            .attr("width");
+          var textlength = this.getComputedTextLength();
 
-	barChart.selectAll("rect")
-	    .data(charset)
-	    .enter()
-	    .append("rect")
-	    .attr("y", function(d) {
-	        return yScaler(d.who);
-  	     })
-	    .attr("height", yScaler.bandwidth())
-	    .attr("width", function(d) {
-	        return xScaler(+d.wc);
-	     })
-	    .attr("fill", function(d) {
-		if (d.gender == 'male') {
-		    return colorM;
- 		} else {
-		    return colorW;
-		}
-	      })
-	     .attr("stroke", "white")
-	     .attr("stroke-width", "1")
-	    .on("mouseover", handleMouseover)
-	    .on("mouseout", handleMouseout);
+          return (textlength + 5) >= rlength ? xScaler(+d.wc) + 5 : xScaler(+d.wc) - (textlength) - 5;
+        })
+        .style("fill", function(d) {
+          var rlength = d3.selectAll("rect")
+            .filter(function(n) { return n === d; })
+            .attr("width");
+          var textlength = this.getComputedTextLength();
 
+          if ((textlength + 5) >= rlength) {
+            return d.gender == 'male' ? colorM : colorW;
+          }
+          return 'white';
+        })
+        .style("opacity", 0);
 
-	var fontsize = yScaler.bandwidth()/2;
+    var y_axis = barChart.append("g")
+      .call(d3.axisLeft(yScaler).tickSize(0))
+      .select(".domain").remove();
 
-	barChart.selectAll("text")
-	    .data(charset)
-	    .enter()
-	    .append("text")
-	    .attr("class", "nums")
-            .attr("y", function(d) {
-                return yScaler(d.who) + (.75 * yScaler.bandwidth());
-             })
+    //THINGS TO NOTE
+    // 1) hovering over the text hides the text
+    // 2) character names are still getting cut off
+    // 3) listing the numbers doesn't scale well when there are a lot of characters
 
-	    .style("font-size", fontsize)
-	    .text(function(d) {
-		return d.wc})
-            .attr("x", function(d) {
-                var rlength = d3.selectAll("rect").filter(function(n) {return n === d;}).attr("width");
-                var textlength = this.getComputedTextLength();
+    function handleMouseover(d) {
+      barChart.selectAll("rect")
+        .attr("opacity", .5);
 
-                if ((textlength + 5) >= rlength) {
-                    return (xScaler(+d.wc) + 5);
-                }
+      d3.select(this).attr("opacity", 1);
 
-                 return (xScaler(+d.wc) - (textlength) - 5);})
-	     .style("fill", function(d) {
-                var rlength = d3.selectAll("rect").filter(function(n) {return n === d;}).attr("width");
-                var textlength = this.getComputedTextLength();
-
-		if ((textlength + 5) >= rlength) {
-		    if (d.gender == 'male') {
-			return colorM;
-		    }
-		    return colorW;
-		}
-		return 'white';})
-	    .style("opacity", 0);
-
-
-
-	var y_axis = barChart.append("g")
-			.call(d3.axisLeft(yScaler).tickSize(0));
-	y_axis.select(".domain").remove();
-
-
-	//THINGS TO NOTE
-	// 1) hovering over the text hides the text
-	// 2) character names are still getting cut off
-	// 3) listing the numbers doesn't scale well when there are a lot of characters
-
-	function handleMouseover(d) {
-
-	    barChart.selectAll("rect")
-		    .attr("opacity", .5);
-
-	    d3.select(this).attr("opacity", 1);
-
-	    d3.selectAll(".nums").filter(function(n) {return n === d;}).style("opacity", 1);
-	}
-
-	function handleMouseout(d) {
-	    barChart.selectAll("rect")
-		    .attr("opacity", 1);
-	    barChart.selectAll(".nums")
-		    .style("opacity", 0);
-	}
+      d3.selectAll(".nums")
+        .filter(function(n) {return n === d;})
+        .style("opacity", 1);
     }
+
+    function handleMouseout(d) {
+      barChart.selectAll("rect")
+        .attr("opacity", 1);
+      barChart.selectAll(".nums")
+        .style("opacity", 0);
+    }
+  }
 });
 
 })();
