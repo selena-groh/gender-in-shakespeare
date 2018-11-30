@@ -1,11 +1,12 @@
 (function () {
 
-
 const itemPrefix = 'timeline-';
 const playPrefix = 'play-';
 
 const tooltip = d3.select('#plays').append('div')
   .attr('class', 'tooltip');
+
+const legendMargin = {top: 30, right: 0, bottom: 0, left: 25};
 
 const charsvg = d3.select('#characters svg'),
     charmargin = {top: 0, right: 0, bottom: 0, left: 25},
@@ -14,15 +15,21 @@ const charsvg = d3.select('#characters svg'),
 
 const mapGenreToColor = {'Comedy': '#BDDD73', 'History': '#AF4DA4', 'Tragedy': '#7484C9'};
 const genres = [{'genre': 'Comedy', 'color': '#BDDD73'}, {'genre': 'History', 'color': '#AF4DA4'}, {'genre': 'Tragedy', 'color': '#7484C9'}];
+
 const colorM = '#66C4BF',
   colorW = '#DD5478';
 
-let currentPlayId = '';
+let genreFocused = '';
+
+let currentActivePlay = undefined;
 
 d3.json('data/shakes-plays-chars.json', function(error, data) {
   if (error) throw error;
 
   makeTimeline();
+  // makePlaysPCP();
+  makePlaysQuad();
+  initShuffle();
 
   function makeTimeline() {
     const circleRadius = 4;
@@ -30,7 +37,6 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
     const timeline = d3.select('#timeline'),
       svg = timeline.select('svg'),
-      legendMargin = {top: 30, right: 0, bottom: 0, left: 25},
       margin = {top: 50, right: 30, bottom: 20, left: 25};
 
     svg.attr('width', '235');
@@ -39,27 +45,8 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     const width = svg.attr('width') - margin.left - margin.right,
       height = svg.attr('height') - margin.top - margin.bottom;
 
-    function makeLegend(parent) {
-      const legend = parent.append('g')
-        .attr('class', 'legend')
-        .attr('transform', 'translate(' + legendMargin.left + ',' + legendMargin.top + ')');
-
-      const legendItem = legend.selectAll('g')
-        .data(genres)
-        .enter().append('g')
-          .attr('class', 'legend-item');
-
-      legendItem.append('circle')
-        .attr('r', circleRadius + 1)
-        .attr('cx', function(d, i) { return i * 75; })
-        .attr('cy', function(d, i) { return 0; })
-        .attr('fill', function(d) { return mapGenreToColor[d.genre]; });
-
-      legendItem.append('text')
-        .attr('x', function(d, i) { return i * 75 + 10; })
-        .attr('y', function(d) { return 5; })
-        .text(function(d) { return d.genre });
-    }
+    makeLegend(svg, 'hidden-mobile');
+    makeLine(svg);
 
     function makeLine(parent) {
       // sort by year then by title
@@ -79,22 +66,25 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         .attr('transform', 'translate(' + timelineOffset + ', 0)')
         .call(d3.axisLeft(y).ticks(0).tickSizeOuter(0));
 
+      timeline.selectAll('.year')
+        .data(data)
+        .enter()
+        .append('text')
+          .attr('class', 'year')
+          .attr('x', function(d) { return timelineOffset - 40; })
+          .attr('y', function(d, i) { return y(i) + 4.5; })
+          .attr('visibility', function(d, i) { return data[i-1] && data[i-1].year === d.year ? 'hidden' : 'visible'; })
+          .text(function(d, i) { return d.year; });
+
       const item = timeline.selectAll('.item')
         .data(data)
         .enter()
         .append('g')
-          .attr('class', 'item')
+          .attr('class', function(d) { return 'item ' + d.genre })
           .attr('id', function(d) { return itemPrefix + d.id; })
           .on('mouseover', handleMouseover)
           .on('mouseout', handleMouseout)
-          .on('click', handleClick);
-
-      item.append('text')
-        .attr('class', 'year')
-        .attr('x', function(d) { return timelineOffset - 40; })
-        .attr('y', function(d, i) { return y(i) + 4.5; })
-        .attr('visibility', function(d, i) { return data[i-1] && data[i-1].year === d.year ? 'hidden' : 'visible'; })
-        .text(function(d, i) { return d.year; });
+          .on('click', loadPlay);
 
       item.append('circle')
         .attr('data', function(d) { return d.year; })
@@ -109,12 +99,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         .attr('y', function(d, i) { return y(i) + 5.5; })
         .text(function(d) { return d.title; });
     }
-
-    makeLegend(svg);
-    makeLine(svg);
   }
-
-  makePlaysPCP()
 
   function makePlaysPCP() {
 
@@ -146,6 +131,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     const totalAxisX = domainwidth * 0.25,
       aveAxisX = domainwidth * 0.75;
 
+    makeLegend(g, '', domainwidth * 0.5, y(-105), 'center');
     makeAxes(g, totalAxisX, aveAxisX);
 
     function makeAxes(parent, a1X, a2X) {
@@ -209,7 +195,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     g.selectAll('circle.total')
       .data(data)
       .enter().append('circle')
-        .attr('class', 'dot total')
+        .attr('class', function(d) { return 'dot total ' + d.genre })
         .attr('id', function(d) { return playPrefix + d.id; })
         .attr('diffAvg', function(d) { return d.diffAvg; })
         .attr('diffSum', function(d) { return d.diffSum; })
@@ -222,12 +208,12 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         .style('cursor', 'pointer')
         .on('mouseover', handleMouseover)
         .on('mouseout', handleMouseout)
-        .on('click', handleClick);
+        .on('click', loadPlay);
 
     g.selectAll('circle.average')
       .data(data)
       .enter().append('circle')
-        .attr('class', 'dot average')
+        .attr('class', function(d) { return 'dot average ' + d.genre })
         .attr('id', function(d) { return playPrefix + d.id + '-ave'; })
         .attr('diffAvg', function(d) { return d.diffAvg; })
         .attr('diffSum', function(d) { return d.diffSum; })
@@ -240,12 +226,12 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         .style('cursor', 'pointer')
         .on('mouseover', handleMouseover)
         .on('mouseout', handleMouseout)
-        .on('click', handleClick);
+        .on('click', loadPlay);
 
     g.selectAll('line.data-line')
       .data(data)
       .enter().append('line')
-        .attr('class', 'data-line')
+        .attr('class', function(d) { return 'data-line ' + d.genre })
         .attr('id', function(d) { return playPrefix + d.id + '-line'; })
         .attr('diffAvg', function(d) { return d.diffAvg; })
         .attr('diffSum', function(d) { return d.diffSum; })
@@ -258,7 +244,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         .style('cursor', 'pointer')
         .on('mouseover', handleMouseover)
         .on('mouseout', handleMouseout)
-        .on('click', handleClick);
+        .on('click', loadPlay);
 
     function padExtent(e, p) {
         if (p === undefined) p = 1;
@@ -270,13 +256,11 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     }
   }
 
-  // makePlays();
-
-  function makePlays() {
+  function makePlaysQuad() {
 
     const plays = d3.select('#plays'),
       svg = plays.select('svg'),
-      margin = {top: 40, right: 20, bottom: 30, left: 20};
+      margin = {top: 40, right: 20, bottom: 50, left: 20};
 
     const side = plays.node().clientWidth < plays.node().clientHeight ? plays.node().clientWidth : plays.node().clientHeight;
     svg.attr('width', side);
@@ -307,6 +291,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .domain([-100, 100])
       .range(padExtent([domainheight, 0]));
 
+    makeLegend(g, '', x(0), y(-115), 'center');
     makeAxes(g);
 
     function makeAxes(parent) {
@@ -331,14 +316,14 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           .attr('transform',
                 'translate(' + x(-100) + ' ,' + (y(0) + 35) + ')')
           .style('text-anchor', 'start')
-          .text('\u27F5 more male');
+          .text('\u27F5 more words per male role');
 
         parent.append('text')
           .attr('class', 'axis-direction female')
           .attr('transform',
                 'translate(' + x(100) + ' ,' + (y(0) + 35) + ')')
           .style('text-anchor', 'end')
-          .text('more female \u27F6');
+          .text('more words per female role \u27F6');
 
         parent.append('text')
           .attr('class', 'axis-direction')
@@ -373,14 +358,14 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           .attr('transform',
                 'translate(' + x(-5) + ' ,' + y(100) + ') rotate(-90)')
           .style('text-anchor', 'end')
-          .text('more female \u27F6');
+          .text('more female words \u27F6');
 
         parent.append('text')
           .attr('class', 'axis-direction male')
           .attr('transform',
                 'translate(' + x(-5) + ' ,' + y(-100) + ') rotate(-90)')
           .style('text-anchor', 'start')
-          .text('\u27F5 more male');
+          .text('\u27F5 more male words');
 
         parent.append('text')
           .attr('class', 'axis-direction')
@@ -404,10 +389,10 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         .attr('stroke', function(d) { if (d === 0) { return 'none'; } return d < 0 ? colorM : colorW; });
     }
 
-    g.selectAll('circle')
+    g.selectAll('circle.dot')
       .data(data)
       .enter().append('circle')
-        .attr('class', 'dot')
+        .attr('class', function(d) { return 'dot ' + d.genre })
         .attr('id', function(d) { return playPrefix + d.id; })
         .attr('diffAvg', function(d) { return d.diffAvg; })
         .attr('diffSum', function(d) { return d.diffSum; })
@@ -420,7 +405,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         .style('cursor', 'pointer')
         .on('mouseover', handleMouseover)
         .on('mouseout', handleMouseout)
-        .on('click', handleClick);
+        .on('click', loadPlay);
 
     function padExtent(e, p) {
         if (p === undefined) p = 1;
@@ -432,145 +417,13 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     }
   }
 
-  function handleMouseover(d) {
-    d3.selectAll('.timeline .title')
-      .transition()
-        .style('fill', '#999')
-        .style('font-weight', '300')
-        .duration(70);
-
-    d3.select('#' + itemPrefix + d.id + ' .title')
-      .transition()
-        .style('fill', '#000')
-        .style('font-weight', '700')
-        .duration(70);
-
-    const playNode = d3.select('#' + playPrefix + d.id);
-    playNode.transition()
-        .duration(100)
-        .style('stroke', 'black')
-        .style('stroke-width', '1px');
-
-    const offset = getOffset(playNode.node());
-
-    if (tooltip.style('opacity') < 0.85) {
-      tooltip.transition()
-        .duration(100)
-        .style('opacity', 0)
-        .on('end', loadTooltip);
-    } else {
-      loadTooltip();
-    }
-
-    function loadTooltip() {
-      tooltip.style('display', 'block');
-      tooltip.transition()
-        .duration(100)
-        .style('opacity', 0.8);
-      tooltip.html(tooltipText(d))
-        .style('left', (offset.left - 150) + 'px')
-        .style('top', (offset.top - 70) + 'px');
-    }
-  }
-
-  function handleMouseout(d) {
-    d3.selectAll('.timeline .title')
-      .transition()
-        .style('fill', '#000')
-        .style('font-weight', '300')
-        .duration(70);
-
-    d3.select('#' + playPrefix + d.id)
-      .transition()
-        .duration(200)
-        .style('stroke', 'white')
-        .style('stroke-width', '0.5px');
-
-    tooltip.transition()
-      .duration(200)
-      .style('opacity', 0)
-      .on('end', function() {
-        tooltip.style('display', 'none');
-      });
-  }
-
-  function handleClick(d) {
-    currentPlayId = d.id;
-    d3.select('#instructions').remove();
-    d3.select('#characters').classed('hidden', false);
-    d3.select('#playTitle').html(d.title);
-    d3.select('#playInfo').html(d.year + ' - ' + d.genre);
-    d3.select('#playSummary').html('<strong>Summary:</strong> ' + d.summary);
-    const count = countByGender(d.characters);
-    d3.select('#playCharBreakdown').html(d.characters.length + ' characters (' + count.chars.male + ' male, ' + count.chars.female + ' female)');
-    d3.select('#playWordsBreakdown').html(numWithCommas(count.wc.male + count.wc.female) + ' words (' + numWithCommas(count.wc.male) + ' male, ' + numWithCommas(count.wc.female) + ' female)');
-    makechars(charsvg);
-  }
-
-  function countByGender(chars) {
-    let charsM = 0, charsF = 0, wcM = 0, wcF = 0;
-    for (var i = 0; i < chars.length; i++) {
-      if (chars[i].gender === 'male') { charsM += 1; } else { charsF += 1; }
-      if (chars[i].gender === 'male') { wcM += chars[i].wc; } else { wcF += chars[i].wc; }
-    }
-
-    return {
-      chars: {
-        male: charsM,
-        female: charsF
-      },
-      wc: {
-        male: wcM,
-        female: wcF
-      }
-    }
-  }
-
-  function numWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
-
-  function getOffset(element) {
-    var bound = element.getBoundingClientRect();
-    var html = document.documentElement;
-
-    return {
-      top: bound.top + window.pageYOffset - html.clientTop,
-      left: bound.left + window.pageXOffset - html.clientLeft
-    };
-  }
-
-  function tooltipText(d) {
-    let text = '<span class="title">' + d.title + '</span><span class="avgVsSum">';
-
-    text += statSummary(d.diffAvg, 'on average');
-    text += '<br/>';
-    text += statSummary(d.diffSum, 'a total of');
-
-    text += '</span>';
-
-    return text;
-  }
-
-  function statSummary(n, w) {
-    const greaterGender = n < 0 ? 'male' : 'female';
-    let text = n < 0 ? 'Males' : 'Females';
-    text += ' have ' + w + ' <span class="' + greaterGender + '">' + printPercent(n) + ' more</span> words than ';
-    text += n < 0 ? 'females' : 'males';
-    return text;
-  }
-
-  function printPercent(a) {
-    return Math.round(Math.abs(a)) + '%';
-  }
-
-  function makechars(parent) {
+  function makeChars(parent) {
 
     parent.selectAll("*").remove();
 
-    if (currentPlayId === '') { return; }
+    if (currentActivePlay === undefined) { return; }
 
-    var myplay = data.find(x => x.id === currentPlayId);
+    var myplay = data.find(x => x.id === currentActivePlay.id);
 
     var charset = myplay.characters;
     charset = charset.sort(function (a, b) {
@@ -608,7 +461,8 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     barChart.attr("transform", "translate(" + Math.ceil(currMaxTextLength + 10) + ", 0)");
 
     let xScaler = d3.scaleLinear()
-      .rangeRound([0, maxBarWidth])
+      // minimum is 4 to prevent bars from disappearing entirely
+      .rangeRound([4, maxBarWidth])
       .domain([0, d3.max(charset.map(function(d) { return d.wc; }))]);
 
     var bar = barChart.selectAll("g.bar-group")
@@ -638,8 +492,9 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
     bar.append("text")
       .attr("class", "nums")
-      .attr("y", function(d) { return yScaler(d.who) + (.75 * yScaler.bandwidth()); })
+      .attr("y", function(d) { return yScaler(d.who) + (.5 * yScaler.bandwidth()); })
       .style("font-size", fontsize)
+      .style("alignment-baseline", "central")
       .text(function(d) { return d.wc; })
       .attr("x", function(d) {
         var rlength = d3.selectAll("rect.databar")
@@ -685,6 +540,243 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         .attr("opacity", 1);
       barChart.selectAll(".nums")
         .style("opacity", 0);
+    }
+  }
+
+  function initShuffle() {
+    d3.selectAll('.shuffle')
+      .style('cursor', 'pointer')
+      .on('click', function() {
+        const i = getRandomInt(0, data.length - 1);
+        loadPlay(data[i]);
+      });
+  }
+
+  function handleMouseover(d) {
+    makeActive(d);
+  }
+
+  function handleMouseout(d) {
+    makeInactive(d);
+  }
+
+  function makeActive(d) {
+    d3.selectAll('.timeline .title')
+      .transition()
+        .style('fill', '#999')
+        .style('font-weight', '300')
+        .duration(70);
+
+    d3.select('#' + itemPrefix + d.id + ' .title')
+      .transition()
+        .style('fill', '#000')
+        .style('font-weight', '700')
+        .duration(70);
+
+    const playNode = d3.select('#' + playPrefix + d.id);
+    playNode.transition()
+        .duration(100)
+        .style('stroke', 'black')
+        .style('stroke-width', '1px');
+
+    const offset = getOffset(playNode.node());
+
+    if (tooltip.style('opacity') < 0.85) {
+      tooltip.transition()
+        .duration(100)
+        .style('opacity', 0)
+        .on('end', loadTooltip);
+    } else {
+      loadTooltip();
+    }
+
+    function loadTooltip() {
+      fadeIn(tooltip, 100, 0.85);
+      tooltip.html(tooltipText(d))
+        .style('left', (offset.left - 140) + 'px')
+        .style('top', (offset.top - 70) + 'px');
+    }
+  }
+
+  function makeInactive(d) {
+    d3.selectAll('.timeline .title')
+      .transition()
+        .style('fill', '#000')
+        .style('font-weight', '300')
+        .duration(70);
+
+    d3.select('#' + playPrefix + d.id)
+      .transition()
+        .duration(200)
+        .style('stroke', 'white')
+        .style('stroke-width', '0.5px');
+
+    fadeOut(tooltip, 200);
+  }
+
+  function loadPlay(d) {
+    currentActivePlay = d;
+    d3.select('#instructions').remove();
+    d3.select('#characters').classed('hidden', false);
+    d3.select('#playTitle').html(d.title);
+    d3.select('#playInfo').html(d.year + ' - ' + d.genre);
+    d3.select('#playSummary').html('<strong>Summary:</strong> ' + d.summary);
+    const count = countByGender(d.characters);
+    d3.select('#playCharBreakdown').html(d.characters.length + ' characters (' + count.chars.male + ' male, ' + count.chars.female + ' female)');
+    d3.select('#playWordsBreakdown').html(numWithCommas(count.wc.male + count.wc.female) + ' words (' + numWithCommas(count.wc.male) + ' male, ' + numWithCommas(count.wc.female) + ' female)');
+    makeChars(charsvg);
+  }
+
+  function countByGender(chars) {
+    let charsM = 0, charsF = 0, wcM = 0, wcF = 0;
+    for (var i = 0; i < chars.length; i++) {
+      if (chars[i].gender === 'male') { charsM += 1; } else { charsF += 1; }
+      if (chars[i].gender === 'male') { wcM += chars[i].wc; } else { wcF += chars[i].wc; }
+    }
+
+    return {
+      chars: {
+        male: charsM,
+        female: charsF
+      },
+      wc: {
+        male: wcM,
+        female: wcF
+      }
+    }
+  }
+
+  function numWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  function getOffset(element) {
+    var bound = element.getBoundingClientRect();
+    var html = document.documentElement;
+
+    return {
+      top: bound.top + window.pageYOffset - html.clientTop,
+      left: bound.left + window.pageXOffset - html.clientLeft
+    };
+  }
+
+  function tooltipText(d) {
+    let text = '<span class="title">' + d.title + '</span><span class="avgVsSum">';
+
+    // text += statSummary(d.diffAvg, 'on average');
+    text += aveSummary(d.diffAvg);
+    text += '<br/>';
+    // text += statSummary(d.diffSum, 'a total of');
+    text += totalSummary(d.diffSum);
+
+    text += '</span>';
+
+    return text;
+  }
+
+  function statSummary(n, w) {
+    const greaterGender = n < 0 ? 'male' : 'female';
+    let text = n < 0 ? 'Male' : 'Female';
+    text += ' roles have ' + w + ' <span class="' + greaterGender + '">' + printPercent(n) + ' more</span> words than ';
+    text += n < 0 ? 'female' : 'male';
+    text += ' roles';
+    return text;
+  }
+
+  function aveSummary(n) {
+    const greaterGender = n < 0 ? 'male' : 'female';
+    let text = 'Average of <span class="' + greaterGender + '">' + printPercent(n) + ' more</span> words for each ';
+    text += n < 0 ? 'male' : 'female';
+    text += ' role';
+    return text;
+  }
+
+  function totalSummary(n) {
+    const greaterGender = n < 0 ? 'male' : 'female';
+    let text = 'Total of <span class="' + greaterGender + '">' + printPercent(n) + ' more</span> words for ';
+    text += n < 0 ? 'males' : 'females';
+    text += ' overall';
+    return text;
+  }
+
+  function printPercent(a) {
+    return Math.round(Math.abs(a)) + '%';
+  }
+
+  function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function fadeIn(e, speed, opacity) {
+    e.style('display', 'block');
+    e.transition()
+      .duration(speed)
+      .style('opacity', opacity);
+  }
+
+  function fadeOut(e, speed) {
+    e.transition()
+      .duration(speed)
+      .style('opacity', 0)
+      .on('end', function() {
+        e.style('display', 'none');
+      });
+  }
+
+  function makeLegend(parent, classes, x = legendMargin.left, y = legendMargin.top, alignment = 'left') {
+    const legend = parent.append('g')
+      .attr('class', 'legend ' + classes);
+
+    const legendItem = legend.selectAll('g')
+      .data(genres)
+      .enter().append('g')
+        .attr('class', 'legend-item')
+        .style('cursor', 'pointer')
+        .on('click', toggleGenre);
+
+    legendItem.append('circle')
+      .attr('r', 5)
+      .attr('cx', function(d, i) { return i * 75; })
+      .attr('cy', function(d, i) { return 0; })
+      .style('cursor', 'pointer')
+      .attr('fill', function(d) { return mapGenreToColor[d.genre]; });
+
+    legendItem.append('text')
+      .attr('x', function(d, i) { return i * 75 + 10; })
+      .attr('y', function(d) { return 5; })
+      .text(function(d) { return d.genre });
+
+    if (alignment === 'center') {
+      x -= legend.node().getBoundingClientRect().width / 2;
+    } else if (alignment === 'right') {
+      x -= legend.node().getBoundingClientRect().width;
+    }
+
+    legend.attr('transform', 'translate(' + x + ', ' + y + ')');
+  }
+
+  function toggleGenre(d) {
+
+    let genreList = Object.keys(mapGenreToColor);
+
+    if (genreFocused === d.genre) {
+      d3.selectAll('.' + genreList.join(',.'))
+        .each(function() {
+          fadeIn(d3.select(this), 500, 1);
+        });
+        genreFocused = '';
+    } else {
+      d3.selectAll('.' + genreList.join(',.'))
+        .each(function(e) {
+          if (d.genre === e.genre) {
+            fadeIn(d3.select(this), 500, 1);
+          } else {
+            fadeOut(d3.select(this), 200);
+          }
+        });
+      genreFocused = d.genre;
     }
   }
 });
