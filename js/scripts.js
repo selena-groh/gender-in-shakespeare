@@ -8,12 +8,12 @@ const tooltip = d3.select('#plays').append('div')
   .attr('class', 'tooltip');
 
 const charsvg = d3.select('#characters svg'),
-    charmargin = {top: 0, right: 30, bottom: 0, left: 25},
+    charmargin = {top: 0, right: 0, bottom: 0, left: 25},
     charwidth = +charsvg.attr('width') - charmargin.left - charmargin.right,
     charheight = +charsvg.attr('height') - charmargin.top - charmargin.bottom;
 
-const mapGenreToColor = {'Comedy': '#BDDD73', 'History': '#AF4DA4', 'Tragedy': '#7484AA'};
-const genres = [{'genre': 'Comedy', 'color': '#BDDD73'}, {'genre': 'History', 'color': '#AF4DA4'}, {'genre': 'Tragedy', 'color': '#7484AA'}];
+const mapGenreToColor = {'Comedy': '#BDDD73', 'History': '#AF4DA4', 'Tragedy': '#7484C9'};
+const genres = [{'genre': 'Comedy', 'color': '#BDDD73'}, {'genre': 'History', 'color': '#AF4DA4'}, {'genre': 'Tragedy', 'color': '#7484C9'}];
 const colorM = '#66C4BF',
   colorW = '#DD5478';
 
@@ -426,32 +426,49 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
     var gap = 0;
 
+    var barChart = charsvg.append("g")
+      .attr("transform", "translate(0, 0)");
+
     let yScaler = d3.scaleBand()
       .rangeRound([0, charheight])
       .padding(gap)
       .domain(charset.map(function(d) { return d.who; }));
+
+    var y_axis = barChart.append("g")
+      .call(d3.axisLeft(yScaler).tickSize(0));
+
+    y_axis.select(".domain").remove();
+
+    let currMaxTextLength = 0;
+    y_axis.selectAll('.tick > text')
+      .each(function (d) {
+        const textLength = this.getComputedTextLength();
+        if (textLength > currMaxTextLength) {
+          currMaxTextLength = textLength;
+        }
+      });
+
+    let maxBarWidth = charwidth - Math.ceil(currMaxTextLength + 10);
+
+    barChart.attr("transform", "translate(" + Math.ceil(currMaxTextLength + 10) + ", 0)");
+
     let xScaler = d3.scaleLinear()
-      .rangeRound([0, charwidth])
+      .rangeRound([0, maxBarWidth])
       .domain([0, d3.max(charset.map(function(d) { return d.wc; }))]);
 
-    var barChart = charsvg.append("g")
-      .attr("transform", "translate(50, 0)");
-
-
-    var bar = barChart.selectAll("g")
+    var bar = barChart.selectAll("g.bar-group")
       .data(charset)
       .enter()
       .append("g")
-        .attr("width", charwidth)
+        .attr("class", "bar-group")
         .on("mouseover", handleMouseover)
         .on("mouseout", handleMouseout);
 
     bar.append("rect")
       .attr("y", function(d) { return yScaler(d.who); })
       .attr("height", yScaler.bandwidth())
-      .attr("width", charwidth)
+      .attr("width", maxBarWidth)
       .attr("fill", "white");
-
 
     bar.append("rect")
       .attr("class", "databar")
@@ -462,7 +479,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .attr("stroke", "white")
       .attr("stroke-width", "1");
 
-    var fontsize = yScaler.bandwidth() * 0.85;
+    var fontsize = Math.min(yScaler.bandwidth() * 0.85, 16);
 
     bar.append("text")
       .attr("class", "nums")
@@ -489,10 +506,6 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         return 'white';
       })
       .style("opacity", 0);
-
-    var y_axis = barChart.append("g")
-      .call(d3.axisLeft(yScaler).tickSize(0))
-      .select(".domain").remove();
 
     //THINGS TO NOTE
     // 1) hovering over the text hides the text
