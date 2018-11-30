@@ -301,6 +301,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     function makeAxes(parent) {
       makeYAxis(parent);
       makeXAxis(parent);
+      makeQuadrantLabels(parent);
 
       function makeXAxis(parent) {
         parent.append('g')
@@ -328,20 +329,6 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
                 'translate(' + x(100) + ' ,' + (y(0) + 35) + ')')
           .style('text-anchor', 'end')
           .text('more words per female role \u27F6');
-
-        parent.append('text')
-          .attr('class', 'axis-direction')
-          .attr('transform',
-                'translate(' + x(-60) + ' ,' + y(-47) + ')')
-          .style('text-anchor', 'middle')
-          .text('Males have more words');
-
-        parent.append('text')
-          .attr('class', 'axis-direction')
-          .attr('transform',
-                'translate(' + x(-60) + ' ,' + y(-53) + ')')
-          .style('text-anchor', 'middle')
-          .text('total and per role');
       }
 
       function makeYAxis(parent) {
@@ -362,28 +349,58 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           .attr('transform',
                 'translate(' + x(-5) + ' ,' + y(100) + ') rotate(-90)')
           .style('text-anchor', 'end')
-          .text('more female words \u27F6');
+          .text('more female words total \u27F6');
 
         parent.append('text')
           .attr('class', 'axis-direction male')
           .attr('transform',
                 'translate(' + x(-5) + ' ,' + y(-100) + ') rotate(-90)')
           .style('text-anchor', 'start')
-          .text('\u27F5 more male words');
+          .text('\u27F5 more male words total');
+      }
+
+      function makeQuadrantLabels(parent) {
+        parent.append('text')
+          .attr('class', 'axis-direction')
+          .attr('transform',
+                'translate(' + x(-60) + ' ,' + y(-45) + ')')
+          .style('text-anchor', 'middle')
+          .text('Males have');
 
         parent.append('text')
           .attr('class', 'axis-direction')
           .attr('transform',
-                'translate(' + x(60) + ' ,' + y(53) + ')')
+                'translate(' + x(-60) + ' ,' + y(-50) + ')')
           .style('text-anchor', 'middle')
-          .text('Females have more words');
+          .text('more words total and');
 
         parent.append('text')
           .attr('class', 'axis-direction')
           .attr('transform',
-                'translate(' + x(60) + ' ,' + y(47) + ')')
+                'translate(' + x(-60) + ' ,' + y(-55) + ')')
           .style('text-anchor', 'middle')
-          .text('total and per role');
+          .text('more words per role');
+
+        parent.append('text')
+          .attr('class', 'axis-direction')
+          .attr('transform',
+                'translate(' + x(60) + ' ,' + y(55) + ')')
+          .style('text-anchor', 'middle')
+          .text('Females have');
+
+        parent.append('text')
+          .attr('class', 'axis-direction')
+          .attr('transform',
+                'translate(' + x(60) + ' ,' + y(50) + ')')
+          .style('text-anchor', 'middle')
+          .text('more words total and');
+
+        parent.append('text')
+          .attr('class', 'axis-direction')
+          .attr('transform',
+                'translate(' + x(60) + ' ,' + y(45) + ')')
+          .style('text-anchor', 'middle')
+          .text('more words per role');
       }
 
       parent.selectAll('.tick text')
