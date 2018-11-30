@@ -33,7 +33,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       legendMargin = {top: 30, right: 0, bottom: 0, left: 25},
       margin = {top: 50, right: 30, bottom: 20, left: 25};
 
-    svg.attr('width', '260');
+    svg.attr('width', '235');
     svg.attr('height', timeline.node().clientHeight);
 
     const width = svg.attr('width') - margin.left - margin.right,
@@ -453,7 +453,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
     const offset = getOffset(playNode.node());
 
-    if (tooltip.style('opacity') < 0.8) {
+    if (tooltip.style('opacity') < 0.85) {
       tooltip.transition()
         .duration(100)
         .style('opacity', 0)
@@ -531,13 +531,13 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
   }
 
   function getOffset(element) {
-      var bound = element.getBoundingClientRect();
-      var html = document.documentElement;
+    var bound = element.getBoundingClientRect();
+    var html = document.documentElement;
 
-      return {
-          top: bound.top + window.pageYOffset - html.clientTop,
-          left: bound.left + window.pageXOffset - html.clientLeft
-      };
+    return {
+      top: bound.top + window.pageYOffset - html.clientTop,
+      left: bound.left + window.pageXOffset - html.clientLeft
+    };
   }
 
   function tooltipText(d) {
