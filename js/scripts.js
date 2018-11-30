@@ -81,7 +81,8 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
       const item = timeline.selectAll('.item')
         .data(data)
-        .enter().append('g')
+        .enter()
+        .append('g')
           .attr('class', 'item')
           .attr('id', function(d) { return itemPrefix + d.id; })
           .on('mouseover', handleMouseover)
@@ -346,17 +347,32 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     d3.select('#playInfo').html(d.year + ' - ' + d.genre);
     d3.select('#playSummary').html('<strong>Summary:</strong> ' + d.summary);
     const count = countByGender(d.characters);
-    d3.select('#playCharBreakdown').html(d.characters.length + ' characters (' + count.male + ' male, ' + count.female + ' female)');
+    d3.select('#playCharBreakdown').html(d.characters.length + ' characters (' + count.chars.male + ' male, ' + count.chars.female + ' female)');
+    d3.select('#playWordsBreakdown').html(numWithCommas(count.wc.male + count.wc.female) + ' words (' + numWithCommas(count.wc.male) + ' male, ' + numWithCommas(count.wc.female) + ' female)');
     makechars(charsvg);
   }
 
   function countByGender(chars) {
-    let m = 0, f = 0;
+    let charsM = 0, charsF = 0, wcM = 0, wcF = 0;
     for (var i = 0; i < chars.length; i++) {
-      if (chars[i].gender === 'male') { m += 1; } else { f += 1; }
+      if (chars[i].gender === 'male') { charsM += 1; } else { charsF += 1; }
+      if (chars[i].gender === 'male') { wcM += chars[i].wc; } else { wcF += chars[i].wc; }
     }
 
-    return { male: m, female: f }
+    return {
+      chars: {
+        male: charsM,
+        female: charsF
+      },
+      wc: {
+        male: wcM,
+        female: wcF
+      }
+    }
+  }
+
+  function numWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   function getOffset(element) {
@@ -426,15 +442,15 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .data(charset)
       .enter()
       .append("g")
-	.attr("width", charwidth)	
-	.on("mouseover", handleMouseover)
-	.on("mouseout", handleMouseout);
+        .attr("width", charwidth)
+        .on("mouseover", handleMouseover)
+        .on("mouseout", handleMouseout);
 
     bar.append("rect")
-      .attr("y", function(d) {return yScaler(d.who);})
+      .attr("y", function(d) { return yScaler(d.who); })
       .attr("height", yScaler.bandwidth())
       .attr("width", charwidth)
-      .attr("fill", "white");      
+      .attr("fill", "white");
 
 
     bar.append("rect")
@@ -446,7 +462,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .attr("stroke", "white")
       .attr("stroke-width", "1");
 
-    var fontsize = yScaler.bandwidth() / 2;
+    var fontsize = yScaler.bandwidth() * 0.85;
 
     bar.append("text")
       .attr("class", "nums")
@@ -459,20 +475,20 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           .attr("width");
         var textlength = this.getComputedTextLength();
 
-          return (textlength + 5) >= rlength ? xScaler(+d.wc) + 5 : xScaler(+d.wc) - (textlength) - 5;
-        })
-        .style("fill", function(d) {
-          var rlength = d3.selectAll("rect.databar")
-            .filter(function(n) { return n === d; })
-            .attr("width");
-          var textlength = this.getComputedTextLength();
+        return (textlength + 5) >= rlength ? xScaler(+d.wc) + 5 : xScaler(+d.wc) - (textlength) - 5;
+      })
+      .style("fill", function(d) {
+        var rlength = d3.selectAll("rect.databar")
+          .filter(function(n) { return n === d; })
+          .attr("width");
+        var textlength = this.getComputedTextLength();
 
-          if ((textlength + 5) >= rlength) {
-            return d.gender == 'male' ? colorM : colorW;
-          }
-          return 'white';
-        })
-        .style("opacity", 0);
+        if ((textlength + 5) >= rlength) {
+          return d.gender == 'male' ? colorM : colorW;
+        }
+        return 'white';
+      })
+      .style("opacity", 0);
 
     var y_axis = barChart.append("g")
       .call(d3.axisLeft(yScaler).tickSize(0))
@@ -486,13 +502,13 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     function handleMouseover(d) {
       barChart.selectAll("rect.databar")
         .attr("opacity", .5);
-      
-      d3.selectAll(".databar")
-	.filter(function(n) { return n === d;})
-	.attr("opacity", 1);
+
+      d3.selectAll("rect.databar")
+        .filter(function(n) { return n === d; })
+        .attr("opacity", 1);
 
       d3.selectAll(".nums")
-        .filter(function(n) {return n === d;})
+        .filter(function(n) { return n === d; })
         .style("opacity", 1);
     }
 
