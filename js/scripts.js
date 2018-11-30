@@ -114,14 +114,169 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     makeLine(svg);
   }
 
-  makePlays();
+  makePlaysPCP()
+
+  function makePlaysPCP() {
+
+    const plays = d3.select('#plays'),
+      svg = plays.select('svg'),
+      margin = {top: 40, right: 20, bottom: 30, left: 20};
+
+    const side = plays.node().clientWidth < plays.node().clientHeight ? plays.node().clientWidth : plays.node().clientHeight;
+    svg.attr('width', side);
+    svg.attr('height', side);
+
+    const width = +svg.attr('width'),
+      height = +svg.attr('height'),
+      domainwidth = width - margin.left - margin.right,
+      domainheight = height - margin.top - margin.bottom;
+
+    data.forEach(function(d) {
+      d.diffSum = percentDifference(d.sumW, d.sumM);
+      d.diffAvg = percentDifference(d.avgW, d.avgM);
+    });
+
+    var g = svg.append('g')
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    var y = d3.scaleLinear()
+      .domain([-100, 60])
+      .range(padExtent([domainheight, 0]));
+
+    const totalAxisX = domainwidth * 0.25,
+      aveAxisX = domainwidth * 0.75;
+
+    makeAxes(g, totalAxisX, aveAxisX);
+
+    function makeAxes(parent, a1X, a2X) {
+      makeTotalAxis(parent, a1X);
+      makeAverageAxis(parent, a2X);
+
+      function makeTotalAxis(parent, x) {
+        parent.append('g')
+          .attr('class', 'y axis')
+          .attr('transform', 'translate(' + x + ', 0)')
+          .call(d3.axisLeft(y).ticks(10).tickFormat(function(d) { return Math.abs(d) + '%'; }));
+
+        parent.append('text')
+          .attr('class', 'axis-label')
+          .attr('transform',
+                'translate(' + x + ' ,' + y(65) + ')')
+          .style('text-anchor', 'middle')
+          .text('Difference in Total Word Count Overall');
+      }
+
+      function makeAverageAxis(parent, x) {
+        parent.append('g')
+          .attr('class', 'y axis')
+          .attr('transform', 'translate(' + x + ', 0)')
+          .call(d3.axisRight(y).ticks(10).tickFormat(function(d) { return Math.abs(d) + '%'; }));
+
+        parent.append('text')
+          .attr('class', 'axis-label')
+          .attr('transform',
+                'translate(' + x + ' ,' + y(65) + ')')
+          .style('text-anchor', 'middle')
+          .text('Difference in Average Word Count per Role');
+      }
+
+      parent.append('text')
+        .attr('class', 'axis-direction female')
+        .attr('transform',
+              'translate(' + (domainwidth / 2) + ' ,' + y(50) + ')')
+        .style('text-anchor', 'middle')
+        .text('more female');
+
+      parent.append('text')
+        .attr('class', 'axis-direction male')
+        .attr('transform',
+              'translate(' + (domainwidth / 2) + ' ,' + y(-90) + ')')
+        .style('text-anchor', 'middle')
+        .text('more male');
+
+      parent.selectAll('.tick text')
+        .attr('fill', colorValue);
+
+      parent.selectAll('.tick line')
+        .attr('stroke', colorValue);
+
+      function colorValue(d) {
+        if (d === 0) { return '#999'; }
+        return d < 0 ? colorM : colorW;
+      };
+    }
+
+    g.selectAll('circle.total')
+      .data(data)
+      .enter().append('circle')
+        .attr('class', 'dot total')
+        .attr('id', function(d) { return playPrefix + d.id; })
+        .attr('diffAvg', function(d) { return d.diffAvg; })
+        .attr('diffSum', function(d) { return d.diffSum; })
+        .attr('r', side / 150)
+        .attr('cx', function(d) { return totalAxisX; })
+        .attr('cy', function(d) { return y(d.diffSum); })
+        .style('stroke', 'white')
+        .style('stroke-width', '0.5px')
+        .style('fill', function(d) { return mapGenreToColor[d.genre]; })
+        .style('cursor', 'pointer')
+        .on('mouseover', handleMouseover)
+        .on('mouseout', handleMouseout)
+        .on('click', handleClick);
+
+    g.selectAll('circle.average')
+      .data(data)
+      .enter().append('circle')
+        .attr('class', 'dot average')
+        .attr('id', function(d) { return playPrefix + d.id + '-ave'; })
+        .attr('diffAvg', function(d) { return d.diffAvg; })
+        .attr('diffSum', function(d) { return d.diffSum; })
+        .attr('r', side / 150)
+        .attr('cx', function(d) { return aveAxisX; })
+        .attr('cy', function(d) { return y(d.diffAvg); })
+        .style('stroke', 'white')
+        .style('stroke-width', '0.5px')
+        .style('fill', function(d) { return mapGenreToColor[d.genre]; })
+        .style('cursor', 'pointer')
+        .on('mouseover', handleMouseover)
+        .on('mouseout', handleMouseout)
+        .on('click', handleClick);
+
+    g.selectAll('line.data-line')
+      .data(data)
+      .enter().append('line')
+        .attr('class', 'data-line')
+        .attr('id', function(d) { return playPrefix + d.id + '-line'; })
+        .attr('diffAvg', function(d) { return d.diffAvg; })
+        .attr('diffSum', function(d) { return d.diffSum; })
+        .attr('x1', function(d) { return totalAxisX; })
+        .attr('x2', function(d) { return aveAxisX; })
+        .attr('y1', function(d) { return y(d.diffSum); })
+        .attr('y2', function(d) { return y(d.diffAvg); })
+        .style('stroke', function(d) { return mapGenreToColor[d.genre]; })
+        .style('stroke-width', '1.5px')
+        .style('cursor', 'pointer')
+        .on('mouseover', handleMouseover)
+        .on('mouseout', handleMouseout)
+        .on('click', handleClick);
+
+    function padExtent(e, p) {
+        if (p === undefined) p = 1;
+        return ([e[0] - p, e[1] + p]);
+    }
+
+    function percentDifference(a, b) {
+      return (a - b) / (a + b) * 100;
+    }
+  }
+
+  // makePlays();
 
   function makePlays() {
 
     const plays = d3.select('#plays'),
       svg = plays.select('svg'),
       margin = {top: 40, right: 20, bottom: 30, left: 20};
-
 
     const side = plays.node().clientWidth < plays.node().clientHeight ? plays.node().clientWidth : plays.node().clientHeight;
     svg.attr('width', side);
