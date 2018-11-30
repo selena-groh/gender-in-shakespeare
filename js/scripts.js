@@ -263,6 +263,9 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       margin = {top: 40, right: 20, bottom: 50, left: 20};
 
     const side = plays.node().clientWidth < plays.node().clientHeight ? plays.node().clientWidth : plays.node().clientHeight;
+    plays.attr('width', side);
+    plays.attr('height', side);
+    plays.classed('noflex', true);
     svg.attr('width', side);
     svg.attr('height', side);
 

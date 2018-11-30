@@ -96,6 +96,16 @@ h1, h2, h3 {
   flex: 1;
 }
 
+#plays.noflex {
+  flex: 0;
+}
+
+@media (min-width: 1000px) {
+  #plays.noflex {
+    flex: 1;
+  }
+}
+
 .subtitle {
   color: #999;
   display: block;
