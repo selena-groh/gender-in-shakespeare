@@ -1,2 +1,2 @@
-# shakespeare
-Visualizing Shakespeare's Text
+# Gender in Shakespeare
+Visualizing gender in Shakespeare's plays
