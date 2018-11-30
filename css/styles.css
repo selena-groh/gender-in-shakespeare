@@ -36,7 +36,7 @@ html, body {
   padding-bottom: 20px;
 }
 
-@media (max-width: 1099px) {
+@media (max-width: 999px) {
   .hidden-mobile {
     display: none;
   }
@@ -92,6 +92,23 @@ h1, h2, h3 {
   max-height: 95px;
 }
 
+.icon-title-wrapper {
+  white-space: nowrap;
+}
+
+.icon {
+  display: inline-block;
+  height: 55px;
+  position: relative;
+  top: 10px;
+}
+
+.page-title {
+  display: inline-block;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
 #plays {
   flex: 1;
 }
@@ -110,14 +127,14 @@ h1, h2, h3 {
   color: #999;
   display: block;
   font-family: 'Charmonman', cursive;
-  left: -37px;
+  left: -8px;
   margin: 0px;
   position: relative;
   top: -20px;
 }
 
 .shuffle {
-  left: 105px;
+  left: 135px;
   position: relative;
   top: -47px;
   height: 16px;
@@ -209,7 +226,7 @@ span.avgVsSum {
 }
 
 #playTitle {
-  margin-top: 0;
+  margin-top: 0.5rem;
 }
 
 #playInfo {
