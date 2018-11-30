@@ -421,39 +421,48 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     var barChart = charsvg.append("g")
       .attr("transform", "translate(50, 0)");
 
-    barChart.selectAll("rect")
+
+    var bar = barChart.selectAll("g")
       .data(charset)
       .enter()
-      .append("rect")
+      .append("g")
+	.attr("width", charwidth)	
+	.on("mouseover", handleMouseover)
+	.on("mouseout", handleMouseout);
+
+    bar.append("rect")
+      .attr("y", function(d) {return yScaler(d.who);})
+      .attr("height", yScaler.bandwidth())
+      .attr("width", charwidth)
+      .attr("fill", "white");      
+
+
+    bar.append("rect")
+      .attr("class", "databar")
       .attr("y", function(d) { return yScaler(d.who); })
       .attr("height", yScaler.bandwidth())
       .attr("width", function(d) { return xScaler(+d.wc); })
       .attr("fill", function(d) { return d.gender == 'male' ? colorM : colorW; })
       .attr("stroke", "white")
-      .attr("stroke-width", "1")
-      .on("mouseover", handleMouseover)
-      .on("mouseout", handleMouseout);
+      .attr("stroke-width", "1");
 
     var fontsize = yScaler.bandwidth() / 2;
 
-    barChart.selectAll("text")
-      .data(charset)
-      .enter()
-        .append("text")
-        .attr("class", "nums")
-        .attr("y", function(d) { return yScaler(d.who) + (.75 * yScaler.bandwidth()); })
-        .style("font-size", fontsize)
-        .text(function(d) { return d.wc; })
-        .attr("x", function(d) {
-          var rlength = d3.selectAll("rect")
-            .filter(function(n) { return n === d; })
-            .attr("width");
-          var textlength = this.getComputedTextLength();
+    bar.append("text")
+      .attr("class", "nums")
+      .attr("y", function(d) { return yScaler(d.who) + (.75 * yScaler.bandwidth()); })
+      .style("font-size", fontsize)
+      .text(function(d) { return d.wc; })
+      .attr("x", function(d) {
+        var rlength = d3.selectAll("rect.databar")
+          .filter(function(n) { return n === d; })
+          .attr("width");
+        var textlength = this.getComputedTextLength();
 
           return (textlength + 5) >= rlength ? xScaler(+d.wc) + 5 : xScaler(+d.wc) - (textlength) - 5;
         })
         .style("fill", function(d) {
-          var rlength = d3.selectAll("rect")
+          var rlength = d3.selectAll("rect.databar")
             .filter(function(n) { return n === d; })
             .attr("width");
           var textlength = this.getComputedTextLength();
@@ -475,10 +484,12 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     // 3) listing the numbers doesn't scale well when there are a lot of characters
 
     function handleMouseover(d) {
-      barChart.selectAll("rect")
+      barChart.selectAll("rect.databar")
         .attr("opacity", .5);
-
-      d3.select(this).attr("opacity", 1);
+      
+      d3.selectAll(".databar")
+	.filter(function(n) { return n === d;})
+	.attr("opacity", 1);
 
       d3.selectAll(".nums")
         .filter(function(n) {return n === d;})
@@ -486,7 +497,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     }
 
     function handleMouseout(d) {
-      barChart.selectAll("rect")
+      barChart.selectAll("rect.databar")
         .attr("opacity", 1);
       barChart.selectAll(".nums")
         .style("opacity", 0);
