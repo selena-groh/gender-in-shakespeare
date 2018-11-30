@@ -30,6 +30,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
   // makePlaysPCP();
   makePlaysQuad();
   initShuffle();
+  loadRandomPlay();
 
   function makeTimeline() {
     const circleRadius = 4;
@@ -549,10 +550,12 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
   function initShuffle() {
     d3.selectAll('.shuffle')
       .style('cursor', 'pointer')
-      .on('click', function() {
-        const i = getRandomInt(0, data.length - 1);
-        loadPlay(data[i]);
-      });
+      .on('click', loadRandomPlay);
+  }
+
+  function loadRandomPlay() {
+    const i = getRandomInt(0, data.length - 1);
+    loadPlay(data[i]);
   }
 
   function handleMouseover(d) {
