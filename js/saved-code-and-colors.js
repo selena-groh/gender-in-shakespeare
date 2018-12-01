@@ -40,3 +40,11 @@ const colorM = '#66C4BF',
 
 // console.log(newShakes);
 // console.log(JSON.stringify(newShakes));
+
+// d3.selectAll(".nums")
+//   .each(function(d) {
+//     let node = d3.select(this);
+//     if (node.style('fill') !== 'white') {
+//       node.style("opacity", .5);
+//     }
+//   });

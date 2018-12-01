@@ -134,20 +134,26 @@ h1, h2, h3 {
 }
 
 .icon {
-  padding: 0 4px;
-  height: 16px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
+  height: 1em;
+  margin: 0 4px;
 }
 
-.shuffle {
+.header-icons {
   left: 150px;
   position: relative;
   top: -47px;
 }
 
-.repeat {
-  left: 150px;
-  position: relative;
-  top: -47px;
+.loop {
+  width: 1em;
+  background-image: url('../img/stop.svg');
+}
+
+.loop.play{
+  background-image: url('../img/play.svg');
 }
 
 .axis {

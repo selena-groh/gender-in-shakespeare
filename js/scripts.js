@@ -23,6 +23,8 @@ let genreFocused = '';
 
 let currentActivePlay = undefined;
 
+let shouldContinueLooping = false;
+
 d3.json('data/shakes-plays-chars.json', function(error, data) {
   if (error) throw error;
 
@@ -93,7 +95,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           .on('click', loadPlay);
 
       item.append('circle')
-	.attr('class', 'time-circle')
+        .attr('class', 'time-circle')
         .attr('data', function(d) { return d.year; })
         .attr('r', circleRadius)
         .attr('cx', function(d) { return timelineOffset; })
@@ -691,15 +693,24 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
   }
 
   function initLoop() {
-    d3.selectAll('.repeat')
+    d3.selectAll('.loop')
       .style('cursor', 'pointer')
       .on('click', function() {
-        loadPlay(data[0]);
+        d3.select(this)
+          .classed('play', function(d) { return !d3.select(this).classed('play'); });
+
+        shouldContinueLooping = !shouldContinueLooping;
+
+        if (shouldContinueLooping) {
+          loadPlay(data[0]);
+        }
         (function loop(i) {
           setTimeout(function () {
-            loadPlay(data[i]);
-            loop((i + 1) % 38);
-          }, 3000);
+            if (shouldContinueLooping) {
+              loadPlay(data[i]);
+              loop((i + 1) % 38);
+            }
+          }, 2000);
         })(1);
       });
   }
@@ -712,33 +723,30 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
   function handleMouseover(d) {
     makeActive(d);
     d3.selectAll(".dot.total, .dot.average")
-	//.style("opacity", function(n) {return n === d ? 1 : .3});
-        .style("fill", function(n) {return n === d ? mapGenreToColor[d.genre] : '#D4D8DA'});
+      .style("fill", function(n) { return n === d ? mapGenreToColor[d.genre] : '#D4D8DA'; });
     d3.selectAll(".dot.average")
-	.style("stroke", function (n) {return n === d ? 'black' : 'none'})
-	.style("stroke-width", function(n) {return n === d? '1px' : '0px'});
+      .style("stroke", function (n) { return n === d ? 'black' : 'none'; })
+      .style("stroke-width", function(n) { return n === d? '1px' : '0px'; });
     d3.selectAll("line.data-line")
-	.style("stroke", function(n) {return n === d ? mapGenreToColor[d.genre] : '#999'})
-	.style("opacity", function(n) {return n === d ? 1 :.3});
+      .style("stroke", function(n) { return n === d ? mapGenreToColor[d.genre] : '#999'; })
+      .style("opacity", function(n) { return n === d ? 1 :.3});
     d3.selectAll(".time-circle")
-	.style("fill", function(n) {return n === d ? mapGenreToColor[d.genre] : '#D4D8DA'})
-	.style('stroke', function(n) {return n === d ? 'black' : 'none'})
-	.style('stroke-width', function(n) {return n === d ? '1px' : '0px'});
- 
+      .style("fill", function(n) { return n === d ? mapGenreToColor[d.genre] : '#D4D8DA'; })
+      .style('stroke', function(n) { return n === d ? 'black' : 'none'; })
+      .style('stroke-width', function(n) { return n === d ? '1px' : '0px'; });
   }
 
   function handleMouseout(d) {
     makeInactive(d);
     d3.selectAll(".dot.total, .dot.average")
-	//.style("opacity", 1);
-	.style("fill", function(n) {return mapGenreToColor[n.genre]});    
+      .style("fill", function(n) { return mapGenreToColor[n.genre]; });
     d3.selectAll(".dot.average").style("stroke", 'none');
     d3.selectAll("line.data-line")
-	.style("opacity", 1)
-	.style("stroke", function(n) {return mapGenreToColor[n.genre]});
+      .style("opacity", 1)
+      .style("stroke", function(n) { return mapGenreToColor[n.genre]; });
     d3.selectAll(".time-circle")
-	.style("fill", function(n) {return mapGenreToColor[n.genre]})
-	.style('stroke', 'none');
+      .style("fill", function(n) { return mapGenreToColor[n.genre]; })
+      .style('stroke', 'none');
   }
 
   function makeActive(d) {
@@ -946,7 +954,6 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
   }
 
   function toggleGenre(d) {
-
     if (genreFocused === d.genre) {
       resetGenre();
     } else {
