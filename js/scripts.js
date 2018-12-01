@@ -27,8 +27,8 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
   if (error) throw error;
 
   makeTimeline();
-  // makePlaysPCP();
-  makePlaysQuad();
+  makePlaysPCP();
+  // makePlaysQuad();
   initShuffle();
   loadRandomPlay();
 
@@ -126,7 +126,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
     var y = d3.scaleLinear()
-      .domain([-100, 60])
+      .domain([-100, 100])
       .range(padExtent([domainheight, 0]));
 
     const totalAxisX = domainwidth * 0.25,
@@ -143,43 +143,99 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         parent.append('g')
           .attr('class', 'y axis')
           .attr('transform', 'translate(' + x + ', 0)')
-          .call(d3.axisLeft(y).ticks(10).tickFormat(function(d) { return Math.abs(d) + '%'; }));
+          .call(d3.axisLeft(y).ticks(10).tickFormat(function(d) { return d === 0 ? '' : Math.abs(d) + '%'; }));
 
         parent.append('text')
           .attr('class', 'axis-label')
           .attr('transform',
-                'translate(' + x + ' ,' + y(65) + ')')
+                'translate(' + (x - 75) + ' ,' + y(1) + ')')
           .style('text-anchor', 'middle')
-          .text('Difference in Total Words Overall');
+          .text('Difference in');
+
+        parent.append('text')
+          .attr('class', 'axis-label')
+          .attr('transform',
+                'translate(' + (x - 75) + ' ,' + y(-4) + ')')
+          .style('text-anchor', 'middle')
+          .text('Total Words for All Roles');
+
+        parent.append('text')
+          .attr('class', 'axis-direction female')
+          .attr('transform',
+                'translate(' + (x - 75) + ' ,' + (y(60) - 10) + ')')
+          .style('text-anchor', 'middle')
+          .text('\u2B06');
+
+        parent.append('text')
+          .attr('class', 'axis-direction female')
+          .attr('transform',
+                'translate(' + (x - 75) + ' ,' + (y(60) + 10) + ')')
+          .style('text-anchor', 'middle')
+          .text('more female');
+
+        parent.append('text')
+          .attr('class', 'axis-direction male')
+          .attr('transform',
+                'translate(' + (x - 75) + ' ,' + (y(-60) - 10) + ')')
+          .style('text-anchor', 'middle')
+          .text('more male');
+
+        parent.append('text')
+          .attr('class', 'axis-direction male')
+          .attr('transform',
+                'translate(' + (x - 75) + ' ,' + (y(-60) + 10) + ')')
+          .style('text-anchor', 'middle')
+          .text('\u2B07');
       }
 
       function makeAverageAxis(parent, x) {
         parent.append('g')
           .attr('class', 'y axis')
           .attr('transform', 'translate(' + x + ', 0)')
-          .call(d3.axisRight(y).ticks(10).tickFormat(function(d) { return Math.abs(d) + '%'; }));
+          .call(d3.axisRight(y).ticks(10).tickFormat(function(d) { return d === 0 ? '' : Math.abs(d) + '%'; }));
 
         parent.append('text')
           .attr('class', 'axis-label')
           .attr('transform',
-                'translate(' + x + ' ,' + y(65) + ')')
+                'translate(' + (x + 75) + ' ,' + y(1) + ')')
           .style('text-anchor', 'middle')
-          .text('Difference in Average Words per Role');
+          .text('Difference in');
+
+        parent.append('text')
+          .attr('class', 'axis-label')
+          .attr('transform',
+                'translate(' + (x + 75) + ' ,' + y(-4) + ')')
+          .style('text-anchor', 'middle')
+          .text('Average Words per Role');
+
+        parent.append('text')
+          .attr('class', 'axis-direction female')
+          .attr('transform',
+                'translate(' + (x + 75) + ' ,' + (y(60) - 10) + ')')
+          .style('text-anchor', 'middle')
+          .text('\u2B06');
+
+        parent.append('text')
+          .attr('class', 'axis-direction female')
+          .attr('transform',
+                'translate(' + (x + 75) + ' ,' + (y(60) + 10) + ')')
+          .style('text-anchor', 'middle')
+          .text('more female');
+
+        parent.append('text')
+          .attr('class', 'axis-direction male')
+          .attr('transform',
+                'translate(' + (x + 75) + ' ,' + (y(-60) - 10) + ')')
+          .style('text-anchor', 'middle')
+          .text('more male');
+
+        parent.append('text')
+          .attr('class', 'axis-direction male')
+          .attr('transform',
+                'translate(' + (x + 75) + ' ,' + (y(-60) + 10) + ')')
+          .style('text-anchor', 'middle')
+          .text('\u2B07');
       }
-
-      parent.append('text')
-        .attr('class', 'axis-direction female')
-        .attr('transform',
-              'translate(' + (domainwidth / 2) + ' ,' + y(50) + ')')
-        .style('text-anchor', 'middle')
-        .text('more female');
-
-      parent.append('text')
-        .attr('class', 'axis-direction male')
-        .attr('transform',
-              'translate(' + (domainwidth / 2) + ' ,' + y(-90) + ')')
-        .style('text-anchor', 'middle')
-        .text('more male');
 
       parent.selectAll('.tick text')
         .attr('fill', colorValue);
@@ -708,7 +764,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
   function aveSummary(n) {
     const greaterGender = n < 0 ? 'male' : 'female';
-    let text = 'Average of <span class="' + greaterGender + '">' + printPercent(n) + ' more</span> words for each ';
+    let text = 'Average of <span class="' + greaterGender + '">' + printPercent(n) + ' more</span> words per ';
     text += n < 0 ? 'male' : 'female';
     text += ' role';
     return text;
