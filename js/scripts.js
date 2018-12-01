@@ -487,7 +487,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     g.selectAll('circle.dot')
       .data(data)
       .enter().append('circle')
-        .attr('class', function(d) { return 'dot ' + d.genre })
+        .attr('class', function(d) { return 'dot quad ' + d.genre })
         .attr('id', function(d) { return playPrefix + d.id; })
         .attr('diffAvg', function(d) { return d.diffAvg; })
         .attr('diffSum', function(d) { return d.diffSum; })
@@ -759,6 +759,8 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .style("fill", function(n) { return n === d ? mapGenreToColor[d.genre] : '#D4D8DA'; })
       .style('stroke', function(n) { return n === d ? 'black' : 'none'; })
       .style('stroke-width', function(n) { return n === d ? '1px' : '0px'; });
+    d3.selectAll(".dot.quad")
+        .style("opacity", function(n) {return n === d ? 1 : .5});
 
     const offset = getOffset(playNode.node());
 
@@ -801,6 +803,8 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     d3.selectAll(".time-circle")
       .style("fill", function(n) { return mapGenreToColor[n.genre]; })
       .style('stroke', 'none');
+    d3.selectAll(".dot.quad")
+        .style("opacity", 1);
 
     fadeOut(tooltip, 200);
   }
