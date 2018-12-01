@@ -592,26 +592,36 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .style("font-size", fontsize)
       .style("alignment-baseline", "central")
       .text(function(d) { return numWithCommas(d.wc); })
-      .attr("x", function(d) {
-        var rlength = d3.selectAll("rect.databar")
-          .filter(function(n) { return n === d; })
-          .attr("end-width");
-        var textlength = this.getComputedTextLength();
-
-        return (textlength + 5) >= rlength ? xScaler(+d.wc) + 5 : xScaler(+d.wc) - (textlength) - 5;
-      })
       .style("fill", function(d) {
         var rlength = d3.selectAll("rect.databar")
           .filter(function(n) { return n === d; })
           .attr("end-width");
         var textlength = this.getComputedTextLength();
 
-        if ((textlength + 5) >= rlength) {
+        // to have text inside bars unless impossible
+        // if ((textlength + 10) >= rlength) {
+
+        // to have text outside bars unless impossible
+        if ((textlength + 10) < (maxBarWidth - rlength)) {
           return d.gender == 'male' ? colorM : colorW;
         }
         return 'white';
       })
-      .style("opacity", 0);
+      .style("opacity", 1)
+      .transition()
+        .duration(500)
+        .attr("x", function(d) {
+          var rlength = d3.selectAll("rect.databar")
+            .filter(function(n) { return n === d; })
+            .attr("end-width");
+          var textlength = this.getComputedTextLength();
+
+          // to have text inside bars unless impossible
+          // return (textlength + 10) >= rlength ? xScaler(+d.wc) + 5 : xScaler(+d.wc) - (textlength) - 5;
+
+          // to have text outside bars unless impossible
+          return ((textlength + 10) < (maxBarWidth - rlength)) ? xScaler(+d.wc) + 5 : xScaler(+d.wc) - (textlength) - 5;
+        });
 
     bar.append("text")
       .attr('class', 'databar-label')
@@ -631,6 +641,14 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       barChart.selectAll("rect.databar")
         .attr("opacity", .5);
 
+      d3.selectAll(".nums")
+        .each(function(d) {
+          let node = d3.select(this);
+          if (node.style('fill') !== 'white') {
+            node.style("opacity", .5);
+          }
+        });
+
       d3.selectAll("rect.databar")
         .filter(function(n) { return n === d; })
         .attr("opacity", 1);
@@ -644,7 +662,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       barChart.selectAll("rect.databar")
         .attr("opacity", 1);
       barChart.selectAll(".nums")
-        .style("opacity", 0);
+        .style("opacity", 1);
     }
   }
 
