@@ -262,6 +262,10 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       };
     }
 
+    g.append("text")
+      .attr("class", "middle-anchor")
+      .attr("transform", "translate(" + domainwidth * .5 + "," + y(70) + ")");
+
     g.selectAll('line.data-line')
       .data(data)
       .enter().append('line')
@@ -324,6 +328,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     function percentDifference(a, b) {
       return (a - b) / (a + b) * 100;
     }
+
   }
 
   function makePlaysQuad(parent) {
@@ -762,7 +767,8 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     d3.selectAll(".dot.quad")
         .style("opacity", function(n) {return n === d ? 1 : .5});
 
-    const offset = getOffset(playNode.node());
+    var mid_anchor = d3.select(".middle-anchor");
+    const offset = (mid_anchor === 'undefined' ? getOffset(playNode.node()) : getOffset(mid_anchor.node()));
 
     if (tooltip.style('opacity') < 0.85) {
       tooltip.transition()
