@@ -33,6 +33,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
   initPlays(plays);
   togglePlays('pcp', plays);
   initShuffle();
+  initLoop();
   loadRandomPlay();
 
   function makeTimeline(parent) {
@@ -598,16 +599,16 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           .attr("end-width");
         var textlength = this.getComputedTextLength();
 
-        // to have text inside bars unless impossible
-        // if ((textlength + 10) >= rlength) {
-
+        // if ((textlength + 10) < (maxBarWidth - rlength)) {
         // to have text outside bars unless impossible
-        if ((textlength + 10) < (maxBarWidth - rlength)) {
+
+        // to have text inside bars unless impossible
+        if ((textlength + 10) >= rlength) {
           return d.gender == 'male' ? colorM : colorW;
         }
         return 'white';
       })
-      .style("opacity", 1)
+      .style("opacity", 0)
       .transition()
         .duration(500)
         .attr("x", function(d) {
@@ -617,10 +618,10 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           var textlength = this.getComputedTextLength();
 
           // to have text inside bars unless impossible
-          // return (textlength + 10) >= rlength ? xScaler(+d.wc) + 5 : xScaler(+d.wc) - (textlength) - 5;
+          return (textlength + 10) >= rlength ? xScaler(+d.wc) + 5 : xScaler(+d.wc) - (textlength) - 5;
 
           // to have text outside bars unless impossible
-          return ((textlength + 10) < (maxBarWidth - rlength)) ? xScaler(+d.wc) + 5 : xScaler(+d.wc) - (textlength) - 5;
+          // return ((textlength + 10) < (maxBarWidth - rlength)) ? xScaler(+d.wc) + 5 : xScaler(+d.wc) - (textlength) - 5;
         });
 
     bar.append("text")
@@ -642,12 +643,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         .attr("opacity", .5);
 
       d3.selectAll(".nums")
-        .each(function(d) {
-          let node = d3.select(this);
-          if (node.style('fill') !== 'white') {
-            node.style("opacity", .5);
-          }
-        });
+        .style("opacity", 0);
 
       d3.selectAll("rect.databar")
         .filter(function(n) { return n === d; })
@@ -662,7 +658,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       barChart.selectAll("rect.databar")
         .attr("opacity", 1);
       barChart.selectAll(".nums")
-        .style("opacity", 1);
+        .style("opacity", 0);
     }
   }
 
@@ -679,10 +675,8 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .style('color', '#999');
 
     if (plot === 'pcp') {
-      console.log('about to enter pcp');
       makePlaysPCP(parent);
     } else if (plot === 'quadrant') {
-      console.log('about to enter quadrant');
       makePlaysQuad(parent);
     }
 
@@ -693,6 +687,20 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     d3.selectAll('.shuffle')
       .style('cursor', 'pointer')
       .on('click', loadRandomPlay);
+  }
+
+  function initLoop() {
+    d3.selectAll('.repeat')
+      .style('cursor', 'pointer')
+      .on('click', function() {
+        loadPlay(data[0]);
+        (function loop(i) {
+          setTimeout(function () {
+            loadPlay(data[i]);
+            loop((i + 1) % 38);
+          }, 3000);
+        })(1);
+      });
   }
 
   function loadRandomPlay() {

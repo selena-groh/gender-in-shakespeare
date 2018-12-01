@@ -92,18 +92,18 @@ h1, h2, h3 {
   max-height: 95px;
 }
 
-.icon-title-wrapper {
+.site-icon-title-wrapper {
   white-space: nowrap;
 }
 
-.icon {
+.site-icon {
   display: inline-block;
   height: 55px;
   position: relative;
   top: 10px;
 }
 
-.page-title {
+.site-title {
   display: inline-block;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
@@ -133,11 +133,21 @@ h1, h2, h3 {
   top: -20px;
 }
 
+.icon {
+  padding: 0 4px;
+  height: 16px;
+}
+
 .shuffle {
-  left: 135px;
+  left: 150px;
   position: relative;
   top: -47px;
-  height: 16px;
+}
+
+.repeat {
+  left: 150px;
+  position: relative;
+  top: -47px;
 }
 
 .axis {
