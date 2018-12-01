@@ -588,7 +588,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .attr("y", function(d) { return yScaler(d.who) + (.5 * yScaler.bandwidth()); })
       .style("font-size", fontsize)
       .style("alignment-baseline", "central")
-      .text(function(d) { return d.wc; })
+      .text(function(d) { return numWithCommas(d.wc); })
       .attr("x", function(d) {
         var rlength = d3.selectAll("rect.databar")
           .filter(function(n) { return n === d; })
