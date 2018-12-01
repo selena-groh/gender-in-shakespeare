@@ -36,7 +36,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
   togglePlays('pcp', plays);
   initShuffle();
   initLoop();
-  loadRandomPlay();
+  // loadRandomPlay();
 
   function makeTimeline(parent) {
 
@@ -738,34 +738,42 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .transition()
         .style('fill', '#999')
         .style('font-weight', '300')
-        .duration(70);
+        .duration(100);
 
     d3.select('#' + itemPrefix + d.id + ' .title')
       .transition()
         .style('fill', '#000')
         .style('font-weight', '700')
-        .duration(70);
+        .duration(100);
 
     const playNode = d3.select('#' + playPrefix + d.id);
-    playNode.transition()
-        .duration(100)
-        .style('stroke', 'black')
-        .style('stroke-width', '1px');
 
     d3.selectAll(".dot.total, .dot.average")
-      .style("fill", function(n) { return n === d ? mapGenreToColor[d.genre] : '#D4D8DA'; });
-    d3.selectAll(".dot.average")
-      .style("stroke", function (n) { return n === d ? 'black' : 'none'; })
-      .style("stroke-width", function(n) { return n === d? '1px' : '0px'; });
-    d3.selectAll("line.data-line")
-      .style("stroke", function(n) { return n === d ? mapGenreToColor[d.genre] : '#999'; })
-      .style("opacity", function(n) { return n === d ? 1 :.3});
-    d3.selectAll(".time-circle")
-      .style("fill", function(n) { return n === d ? mapGenreToColor[d.genre] : '#D4D8DA'; })
-      .style('stroke', function(n) { return n === d ? 'black' : 'none'; })
-      .style('stroke-width', function(n) { return n === d ? '1px' : '0px'; });
+      .transition()
+        .duration(100)
+        .style("fill", function(n) { return n === d ? mapGenreToColor[d.genre] : '#D4D8DA'; })
+        .style("stroke", function (n) { return n === d ? 'black' : 'white'; })
+        .style("stroke-width", function(n) { return n === d? '1px' : '0.5px'; });
+
     d3.selectAll(".dot.quad")
-        .style("opacity", function(n) {return n === d ? 1 : .5});
+      .transition()
+        .duration(100)
+        .style("opacity", function(n) { return n === d ? 1 : .5})
+        .style("stroke", function (n) { return n === d ? 'black' : 'white'; })
+        .style("stroke-width", function(n) { return n === d? '1px' : '0.5px'; });
+
+    d3.selectAll("line.data-line")
+      .transition()
+      .duration(100)
+        .style("stroke", function(n) { return n === d ? mapGenreToColor[d.genre] : '#999'; })
+        .style("opacity", function(n) { return n === d ? 1 :.3});
+
+    d3.selectAll(".time-circle")
+      .transition()
+      .duration(100)
+        .style("fill", function(n) { return n === d ? mapGenreToColor[d.genre] : '#D4D8DA'; })
+        .style('stroke', function(n) { return n === d ? 'black' : 'none'; })
+        .style('stroke-width', function(n) { return n === d ? '1px' : '0px'; });
 
     var mid_anchor = d3.select(".middle-anchor");
     const offset = (mid_anchor === 'undefined' ? getOffset(playNode.node()) : getOffset(mid_anchor.node()));
@@ -790,9 +798,9 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
   function makeInactive(d) {
     d3.selectAll('.timeline .title')
       .transition()
+        .duration(200)
         .style('fill', '#000')
-        .style('font-weight', '300')
-        .duration(70);
+        .style('font-weight', '300');
 
     d3.select('#' + playPrefix + d.id)
       .transition()
@@ -801,21 +809,32 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         .style('stroke-width', '0.5px');
 
     d3.selectAll(".dot.total, .dot.average")
-      .style("fill", function(n) { return mapGenreToColor[n.genre]; });
-    d3.selectAll(".dot.average").style("stroke", 'none');
-    d3.selectAll("line.data-line")
-      .style("opacity", 1)
-      .style("stroke", function(n) { return mapGenreToColor[n.genre]; });
-    d3.selectAll(".time-circle")
-      .style("fill", function(n) { return mapGenreToColor[n.genre]; })
-      .style('stroke', 'none');
+      .transition()
+        .duration(200)
+        .style("fill", function(n) { return mapGenreToColor[n.genre]; })
+        .style("stroke", 'none');
+
     d3.selectAll(".dot.quad")
         .style("opacity", 1);
+
+    d3.selectAll("line.data-line")
+      .transition()
+        .duration(200)
+        .style("opacity", 1)
+        .style("stroke", function(n) { return mapGenreToColor[n.genre]; });
+
+    d3.selectAll(".time-circle")
+      .transition()
+        .duration(200)
+        .style("fill", function(n) { return mapGenreToColor[n.genre]; })
+        .style('stroke', 'none');
 
     fadeOut(tooltip, 200);
   }
 
   function loadPlay(d) {
+    makeActive(d);
+
     currentActivePlay = d;
     d3.select('#instructions').remove();
     d3.select('#characters').classed('hidden', false);
