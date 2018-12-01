@@ -738,39 +738,39 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .transition()
         .style('fill', '#999')
         .style('font-weight', '300')
-        .duration(100);
+        .duration(20);
 
     d3.select('#' + itemPrefix + d.id + ' .title')
       .transition()
         .style('fill', '#000')
         .style('font-weight', '700')
-        .duration(100);
+        .duration(20);
 
     const playNode = d3.select('#' + playPrefix + d.id);
 
     d3.selectAll(".dot.total, .dot.average")
       .transition()
-        .duration(100)
+        .duration(20)
         .style("fill", function(n) { return n === d ? mapGenreToColor[d.genre] : '#D4D8DA'; })
         .style("stroke", function (n) { return n === d ? 'black' : 'white'; })
         .style("stroke-width", function(n) { return n === d? '1px' : '0.5px'; });
 
     d3.selectAll(".dot.quad")
       .transition()
-        .duration(100)
+        .duration(20)
         .style("opacity", function(n) { return n === d ? 1 : .5})
         .style("stroke", function (n) { return n === d ? 'black' : 'white'; })
         .style("stroke-width", function(n) { return n === d? '1px' : '0.5px'; });
 
     d3.selectAll("line.data-line")
       .transition()
-      .duration(100)
+      .duration(20)
         .style("stroke", function(n) { return n === d ? mapGenreToColor[d.genre] : '#999'; })
         .style("opacity", function(n) { return n === d ? 1 :.3});
 
     d3.selectAll(".time-circle")
       .transition()
-      .duration(100)
+      .duration(20)
         .style("fill", function(n) { return n === d ? mapGenreToColor[d.genre] : '#D4D8DA'; })
         .style('stroke', function(n) { return n === d ? 'black' : 'none'; })
         .style('stroke-width', function(n) { return n === d ? '1px' : '0px'; });
@@ -798,19 +798,19 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
   function makeInactive(d) {
     d3.selectAll('.timeline .title')
       .transition()
-        .duration(200)
+        .duration(100)
         .style('fill', '#000')
         .style('font-weight', '300');
 
     d3.select('#' + playPrefix + d.id)
       .transition()
-        .duration(200)
+        .duration(100)
         .style('stroke', 'white')
         .style('stroke-width', '0.5px');
 
     d3.selectAll(".dot.total, .dot.average")
       .transition()
-        .duration(200)
+        .duration(100)
         .style("fill", function(n) { return mapGenreToColor[n.genre]; })
         .style("stroke", 'none');
 
@@ -819,13 +819,13 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
     d3.selectAll("line.data-line")
       .transition()
-        .duration(200)
+        .duration(300)
         .style("opacity", 1)
         .style("stroke", function(n) { return mapGenreToColor[n.genre]; });
 
     d3.selectAll(".time-circle")
       .transition()
-        .duration(200)
+        .duration(100)
         .style("fill", function(n) { return mapGenreToColor[n.genre]; })
         .style('stroke', 'none');
 
