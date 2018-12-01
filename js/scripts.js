@@ -93,6 +93,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
           .on('click', loadPlay);
 
       item.append('circle')
+	.attr('class', 'time-circle')
         .attr('data', function(d) { return d.year; })
         .attr('r', circleRadius)
         .attr('cx', function(d) { return timelineOffset; })
@@ -271,7 +272,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         .attr('y1', function(d) { return y(d.diffSum); })
         .attr('y2', function(d) { return y(d.diffAvg); })
         .style('stroke', function(d) { return mapGenreToColor[d.genre]; })
-        .style('stroke-width', '1.5px')
+        .style('stroke-width', '2.5px')
         .style('cursor', 'pointer')
         .on('mouseover', handleMouseover)
         .on('mouseout', handleMouseout)
@@ -710,10 +711,34 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
   function handleMouseover(d) {
     makeActive(d);
+    d3.selectAll(".dot.total, .dot.average")
+	//.style("opacity", function(n) {return n === d ? 1 : .3});
+        .style("fill", function(n) {return n === d ? mapGenreToColor[d.genre] : '#D4D8DA'});
+    d3.selectAll(".dot.average")
+	.style("stroke", function (n) {return n === d ? 'black' : 'none'})
+	.style("stroke-width", function(n) {return n === d? '1px' : '0px'});
+    d3.selectAll("line.data-line")
+	.style("stroke", function(n) {return n === d ? mapGenreToColor[d.genre] : '#999'})
+	.style("opacity", function(n) {return n === d ? 1 :.3});
+    d3.selectAll(".time-circle")
+	.style("fill", function(n) {return n === d ? mapGenreToColor[d.genre] : '#D4D8DA'})
+	.style('stroke', function(n) {return n === d ? 'black' : 'none'})
+	.style('stroke-width', function(n) {return n === d ? '1px' : '0px'});
+ 
   }
 
   function handleMouseout(d) {
     makeInactive(d);
+    d3.selectAll(".dot.total, .dot.average")
+	//.style("opacity", 1);
+	.style("fill", function(n) {return mapGenreToColor[n.genre]});    
+    d3.selectAll(".dot.average").style("stroke", 'none');
+    d3.selectAll("line.data-line")
+	.style("opacity", 1)
+	.style("stroke", function(n) {return mapGenreToColor[n.genre]});
+    d3.selectAll(".time-circle")
+	.style("fill", function(n) {return mapGenreToColor[n.genre]})
+	.style('stroke', 'none');
   }
 
   function makeActive(d) {
