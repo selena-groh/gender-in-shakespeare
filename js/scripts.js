@@ -112,7 +112,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .style('color', 'black');
 
     const svg = parent.select('svg'),
-      margin = {top: 40, right: 20, bottom: 30, left: 20};
+      margin = {top: 10, right: 20, bottom: 30, left: 20};
 
     svg.selectAll("*").remove();
 
@@ -141,7 +141,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     const totalAxisX = domainwidth * 0.25,
       aveAxisX = domainwidth * 0.75;
 
-    makeLegend(g, '', domainwidth * 0.5, height - 50, 'center');
+    makeLegend(g, '', domainwidth * 0.5, height - 25, 'center');
     makeAxes(g, totalAxisX, aveAxisX);
 
     function makeAxes(parent, a1X, a2X) {
@@ -258,6 +258,24 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       };
     }
 
+    g.selectAll('line.data-line')
+      .data(data)
+      .enter().append('line')
+        .attr('class', function(d) { return 'data-line ' + d.genre })
+        .attr('id', function(d) { return playPrefix + d.id + '-line'; })
+        .attr('diffAvg', function(d) { return d.diffAvg; })
+        .attr('diffSum', function(d) { return d.diffSum; })
+        .attr('x1', function(d) { return totalAxisX; })
+        .attr('x2', function(d) { return aveAxisX; })
+        .attr('y1', function(d) { return y(d.diffSum); })
+        .attr('y2', function(d) { return y(d.diffAvg); })
+        .style('stroke', function(d) { return mapGenreToColor[d.genre]; })
+        .style('stroke-width', '1.5px')
+        .style('cursor', 'pointer')
+        .on('mouseover', handleMouseover)
+        .on('mouseout', handleMouseout)
+        .on('click', loadPlay);
+
     g.selectAll('circle.total')
       .data(data)
       .enter().append('circle')
@@ -289,24 +307,6 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         .style('stroke', 'white')
         .style('stroke-width', '0.5px')
         .style('fill', function(d) { return mapGenreToColor[d.genre]; })
-        .style('cursor', 'pointer')
-        .on('mouseover', handleMouseover)
-        .on('mouseout', handleMouseout)
-        .on('click', loadPlay);
-
-    g.selectAll('line.data-line')
-      .data(data)
-      .enter().append('line')
-        .attr('class', function(d) { return 'data-line ' + d.genre })
-        .attr('id', function(d) { return playPrefix + d.id + '-line'; })
-        .attr('diffAvg', function(d) { return d.diffAvg; })
-        .attr('diffSum', function(d) { return d.diffSum; })
-        .attr('x1', function(d) { return totalAxisX; })
-        .attr('x2', function(d) { return aveAxisX; })
-        .attr('y1', function(d) { return y(d.diffSum); })
-        .attr('y2', function(d) { return y(d.diffAvg); })
-        .style('stroke', function(d) { return mapGenreToColor[d.genre]; })
-        .style('stroke-width', '1.5px')
         .style('cursor', 'pointer')
         .on('mouseover', handleMouseover)
         .on('mouseout', handleMouseout)
@@ -365,7 +365,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .domain([-100, 100])
       .range(padExtent([domainheight, 0]));
 
-    makeLegend(g, '', x(0), height - 50, 'center');
+    makeLegend(g, '', x(0), height - 55, 'center');
     makeAxes(g);
 
     function makeAxes(parent) {
