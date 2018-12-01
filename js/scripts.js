@@ -664,6 +664,8 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       console.log('about to enter quadrant');
       makePlaysQuad(parent);
     }
+
+    resetGenre();
   }
 
   function initShuffle() {
@@ -891,21 +893,10 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
   function toggleGenre(d) {
 
-    let genreList = Object.keys(mapGenreToColor);
-
     if (genreFocused === d.genre) {
-      d3.selectAll('.' + genreList.join(',.'))
-        .each(function() {
-          const node = d3.select(this);
-          if (node.classed('legend-item-text')) {
-            fade(node, 500, 'fill', 'black');
-          } else {
-            fadeIn(node, 500, 1);
-          }
-        });
-        genreFocused = '';
+      resetGenre();
     } else {
-      d3.selectAll('.' + genreList.join(',.'))
+      d3.selectAll('.' + Object.keys(mapGenreToColor).join(',.'))
         .each(function(e) {
           const node = d3.select(this);
 
@@ -923,6 +914,20 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       genreFocused = d.genre;
     }
   }
+
+function resetGenre() {
+  d3.selectAll('.' + Object.keys(mapGenreToColor).join(',.'))
+    .each(function() {
+      const node = d3.select(this);
+      if (node.classed('legend-item-text')) {
+        fade(node, 500, 'fill', 'black');
+      } else {
+        fadeIn(node, 500, 1);
+      }
+    });
+    genreFocused = '';
+}
+
 });
 
 })();
