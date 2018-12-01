@@ -26,22 +26,26 @@ let currentActivePlay = undefined;
 d3.json('data/shakes-plays-chars.json', function(error, data) {
   if (error) throw error;
 
-  makeTimeline();
-  makePlaysPCP();
-  // makePlaysQuad();
+  const timeline = d3.select('#timeline'),
+    plays = d3.select('#plays');
+
+  makeTimeline(timeline);
+  initPlays(plays);
+  togglePlays('pcp', plays);
   initShuffle();
   loadRandomPlay();
 
-  function makeTimeline() {
+  function makeTimeline(parent) {
+
     const circleRadius = 4;
     const timelineOffset = 35;
 
-    const timeline = d3.select('#timeline'),
-      svg = timeline.select('svg'),
+    const svg = parent.select('svg'),
       margin = {top: 50, right: 30, bottom: 20, left: 25};
 
+    svg.selectAll("*").remove();
     svg.attr('width', '235');
-    svg.attr('height', timeline.node().clientHeight);
+    svg.attr('height', parent.node().clientHeight);
 
     const width = svg.attr('width') - margin.left - margin.right,
       height = svg.attr('height') - margin.top - margin.bottom;
@@ -102,13 +106,18 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     }
   }
 
-  function makePlaysPCP() {
+  function makePlaysPCP(parent) {
 
-    const plays = d3.select('#plays'),
-      svg = plays.select('svg'),
+    d3.select('.pcp')
+      .style('color', 'black');
+
+    const svg = parent.select('svg'),
       margin = {top: 40, right: 20, bottom: 30, left: 20};
 
-    const side = plays.node().clientWidth < plays.node().clientHeight ? plays.node().clientWidth : plays.node().clientHeight;
+    svg.selectAll("*").remove();
+
+    let side = parent.node().clientWidth < parent.node().clientHeight ? parent.node().clientWidth : parent.node().clientHeight;
+    side -= 3;
     svg.attr('width', side);
     svg.attr('height', side);
 
@@ -132,7 +141,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     const totalAxisX = domainwidth * 0.25,
       aveAxisX = domainwidth * 0.75;
 
-    makeLegend(g, '', domainwidth * 0.5, y(-105), 'center');
+    makeLegend(g, '', domainwidth * 0.5, height - 50, 'center');
     makeAxes(g, totalAxisX, aveAxisX);
 
     function makeAxes(parent, a1X, a2X) {
@@ -313,16 +322,21 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     }
   }
 
-  function makePlaysQuad() {
+  function makePlaysQuad(parent) {
 
-    const plays = d3.select('#plays'),
-      svg = plays.select('svg'),
+    d3.select('.quadrant')
+      .style('color', 'black');
+
+    const svg = parent.select('svg'),
       margin = {top: 40, right: 20, bottom: 50, left: 20};
 
-    const side = plays.node().clientWidth < plays.node().clientHeight ? plays.node().clientWidth : plays.node().clientHeight;
-    plays.attr('width', side);
-    plays.attr('height', side);
-    plays.classed('noflex', true);
+    svg.selectAll("*").remove();
+
+    let side = parent.node().clientWidth < parent.node().clientHeight ? parent.node().clientWidth : parent.node().clientHeight;
+    side -= 3;
+    parent.attr('width', side);
+    parent.attr('height', side);
+    parent.classed('noflex', true);
     svg.attr('width', side);
     svg.attr('height', side);
 
@@ -351,7 +365,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .domain([-100, 100])
       .range(padExtent([domainheight, 0]));
 
-    makeLegend(g, '', x(0), y(-115), 'center');
+    makeLegend(g, '', x(0), height - 50, 'center');
     makeAxes(g);
 
     function makeAxes(parent) {
@@ -520,9 +534,8 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .domain(charset.map(function(d) { return d.who; }));
 
     var y_axis = barChart.append("g")
-      .call(d3.axisLeft(yScaler).tickSize(0));
-
-    y_axis.select(".domain").remove();
+      .attr('class', 'char-axis-y')
+      .call(d3.axisLeft(yScaler).tickSize(0))
 
     let currMaxTextLength = 0;
     y_axis.selectAll('.tick > text')
@@ -536,6 +549,9 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     let maxBarWidth = charwidth - Math.ceil(currMaxTextLength + 10);
 
     barChart.attr("transform", "translate(" + Math.ceil(currMaxTextLength + 10) + ", 0)");
+
+    // delete y-axis -- it is only added for measurement purposes
+    barChart.select('g.char-axis-y').remove();
 
     let xScaler = d3.scaleLinear()
       // minimum is 4 to prevent bars from disappearing entirely
@@ -551,9 +567,9 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         .on("mouseout", handleMouseout);
 
     bar.append("rect")
-      .attr("y", function(d) { return yScaler(d.who); })
+      .attr("transform", function(d) { return "translate(" + (-Math.ceil(currMaxTextLength + 10)) + ", " + yScaler(d.who) + ")"; })
       .attr("height", yScaler.bandwidth())
-      .attr("width", maxBarWidth)
+      .attr("width", charwidth)
       .attr("fill", "white");
 
     bar.append("rect")
@@ -594,6 +610,15 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       })
       .style("opacity", 0);
 
+    bar.append("text")
+      .attr('class', 'databar-label')
+      .style('font-size', 10)
+      .attr('text-anchor', 'end')
+      .attr('y', function(d) { return yScaler(d.who) + (.5 * yScaler.bandwidth()); })
+      .attr('x', -3)
+      .attr('dy', '0.32em')
+      .text(function(d) { return d.who; })
+
     //THINGS TO NOTE
     // 1) hovering over the text hides the text
     // 2) character names are still getting cut off
@@ -617,6 +642,27 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         .attr("opacity", 1);
       barChart.selectAll(".nums")
         .style("opacity", 0);
+    }
+  }
+
+  function initPlays(parent) {
+    d3.select('.pcp')
+      .on('click', function(){ togglePlays('pcp', parent); });
+
+    d3.select('.quadrant')
+      .on('click', function(){ togglePlays('quadrant', parent); });
+  }
+
+  function togglePlays(plot, parent) {
+    d3.selectAll('.play-graph-label')
+      .style('color', '#999');
+
+    if (plot === 'pcp') {
+      console.log('about to enter pcp');
+      makePlaysPCP(parent);
+    } else if (plot === 'quadrant') {
+      console.log('about to enter quadrant');
+      makePlaysQuad(parent);
     }
   }
 
@@ -788,6 +834,12 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
+  function fade(e, speed, attr, val) {
+    e.transition()
+      .duration(speed)
+      .style(attr, val);
+  }
+
   function fadeIn(e, speed, opacity) {
     e.style('display', 'block');
     e.transition()
@@ -823,6 +875,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .attr('fill', function(d) { return mapGenreToColor[d.genre]; });
 
     legendItem.append('text')
+      .attr('class', function(d) { return 'legend-item-text ' + d.genre; })
       .attr('x', function(d, i) { return i * 75 + 10; })
       .attr('y', function(d) { return 5; })
       .text(function(d) { return d.genre });
@@ -843,17 +896,29 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     if (genreFocused === d.genre) {
       d3.selectAll('.' + genreList.join(',.'))
         .each(function() {
-          fadeIn(d3.select(this), 500, 1);
+          const node = d3.select(this);
+          if (node.classed('legend-item-text')) {
+            fade(node, 500, 'fill', 'black');
+          } else {
+            fadeIn(node, 500, 1);
+          }
         });
         genreFocused = '';
     } else {
       d3.selectAll('.' + genreList.join(',.'))
         .each(function(e) {
-          if (d.genre === e.genre) {
-            fadeIn(d3.select(this), 500, 1);
+          const node = d3.select(this);
+
+          if (node.classed('legend-item-text')) {
+            if (d.genre === e.genre) {
+              fade(node, 500, 'fill', 'black');
+            } else {
+              fade(node, 300, 'fill', '#999');
+            }
           } else {
-            fadeOut(d3.select(this), 200);
+            d.genre === e.genre ? fadeIn(node, 500, 1) : fadeOut(node, 300);
           }
+
         });
       genreFocused = d.genre;
     }

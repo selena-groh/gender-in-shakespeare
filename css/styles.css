@@ -246,3 +246,14 @@ span.avgVsSum {
 .sources a:hover, .sources a:focus {
   text-decoration: underline;
 }
+
+.play-graph-labels {
+  margin: 0;
+}
+
+.play-graph-label {
+  font-size: 0.7rem;
+  color: #999;
+  cursor: pointer;
+  padding: 0 0.5rem;
+}
