@@ -722,31 +722,10 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
 
   function handleMouseover(d) {
     makeActive(d);
-    d3.selectAll(".dot.total, .dot.average")
-      .style("fill", function(n) { return n === d ? mapGenreToColor[d.genre] : '#D4D8DA'; });
-    d3.selectAll(".dot.average")
-      .style("stroke", function (n) { return n === d ? 'black' : 'none'; })
-      .style("stroke-width", function(n) { return n === d? '1px' : '0px'; });
-    d3.selectAll("line.data-line")
-      .style("stroke", function(n) { return n === d ? mapGenreToColor[d.genre] : '#999'; })
-      .style("opacity", function(n) { return n === d ? 1 :.3});
-    d3.selectAll(".time-circle")
-      .style("fill", function(n) { return n === d ? mapGenreToColor[d.genre] : '#D4D8DA'; })
-      .style('stroke', function(n) { return n === d ? 'black' : 'none'; })
-      .style('stroke-width', function(n) { return n === d ? '1px' : '0px'; });
   }
 
   function handleMouseout(d) {
     makeInactive(d);
-    d3.selectAll(".dot.total, .dot.average")
-      .style("fill", function(n) { return mapGenreToColor[n.genre]; });
-    d3.selectAll(".dot.average").style("stroke", 'none');
-    d3.selectAll("line.data-line")
-      .style("opacity", 1)
-      .style("stroke", function(n) { return mapGenreToColor[n.genre]; });
-    d3.selectAll(".time-circle")
-      .style("fill", function(n) { return mapGenreToColor[n.genre]; })
-      .style('stroke', 'none');
   }
 
   function makeActive(d) {
@@ -767,6 +746,19 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         .duration(100)
         .style('stroke', 'black')
         .style('stroke-width', '1px');
+
+    d3.selectAll(".dot.total, .dot.average")
+      .style("fill", function(n) { return n === d ? mapGenreToColor[d.genre] : '#D4D8DA'; });
+    d3.selectAll(".dot.average")
+      .style("stroke", function (n) { return n === d ? 'black' : 'none'; })
+      .style("stroke-width", function(n) { return n === d? '1px' : '0px'; });
+    d3.selectAll("line.data-line")
+      .style("stroke", function(n) { return n === d ? mapGenreToColor[d.genre] : '#999'; })
+      .style("opacity", function(n) { return n === d ? 1 :.3});
+    d3.selectAll(".time-circle")
+      .style("fill", function(n) { return n === d ? mapGenreToColor[d.genre] : '#D4D8DA'; })
+      .style('stroke', function(n) { return n === d ? 'black' : 'none'; })
+      .style('stroke-width', function(n) { return n === d ? '1px' : '0px'; });
 
     const offset = getOffset(playNode.node());
 
@@ -799,6 +791,16 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         .duration(200)
         .style('stroke', 'white')
         .style('stroke-width', '0.5px');
+
+    d3.selectAll(".dot.total, .dot.average")
+      .style("fill", function(n) { return mapGenreToColor[n.genre]; });
+    d3.selectAll(".dot.average").style("stroke", 'none');
+    d3.selectAll("line.data-line")
+      .style("opacity", 1)
+      .style("stroke", function(n) { return mapGenreToColor[n.genre]; });
+    d3.selectAll(".time-circle")
+      .style("fill", function(n) { return mapGenreToColor[n.genre]; })
+      .style('stroke', 'none');
 
     fadeOut(tooltip, 200);
   }
@@ -976,18 +978,18 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
     }
   }
 
-function resetGenre() {
-  d3.selectAll('.' + Object.keys(mapGenreToColor).join(',.'))
-    .each(function() {
-      const node = d3.select(this);
-      if (node.classed('legend-item-text')) {
-        fade(node, 500, 'fill', 'black');
-      } else {
-        fadeIn(node, 500, 1);
-      }
-    });
-    genreFocused = '';
-}
+  function resetGenre() {
+    d3.selectAll('.' + Object.keys(mapGenreToColor).join(',.'))
+      .each(function() {
+        const node = d3.select(this);
+        if (node.classed('legend-item-text')) {
+          fade(node, 500, 'fill', 'black');
+        } else {
+          fadeIn(node, 500, 1);
+        }
+      });
+      genreFocused = '';
+  }
 
 });
 
