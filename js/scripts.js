@@ -576,10 +576,13 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .attr("class", "databar")
       .attr("y", function(d) { return yScaler(d.who); })
       .attr("height", yScaler.bandwidth())
-      .attr("width", function(d) { return xScaler(+d.wc); })
       .attr("fill", function(d) { return d.gender == 'male' ? colorM : colorW; })
       .attr("stroke", "white")
-      .attr("stroke-width", "1");
+      .attr("stroke-width", "1")
+      .attr("end-width", function(d) { return xScaler(+d.wc); })
+      .transition()
+        .duration(500)
+        .attr("width", function(d) { return xScaler(+d.wc); });
 
     var fontsize = Math.min(yScaler.bandwidth() * 0.85, 16);
 
@@ -592,7 +595,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .attr("x", function(d) {
         var rlength = d3.selectAll("rect.databar")
           .filter(function(n) { return n === d; })
-          .attr("width");
+          .attr("end-width");
         var textlength = this.getComputedTextLength();
 
         return (textlength + 5) >= rlength ? xScaler(+d.wc) + 5 : xScaler(+d.wc) - (textlength) - 5;
@@ -600,7 +603,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
       .style("fill", function(d) {
         var rlength = d3.selectAll("rect.databar")
           .filter(function(n) { return n === d; })
-          .attr("width");
+          .attr("end-width");
         var textlength = this.getComputedTextLength();
 
         if ((textlength + 5) >= rlength) {
