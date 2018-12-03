@@ -776,7 +776,7 @@ d3.json('data/shakes-plays-chars.json', function(error, data) {
         .style('stroke-width', function(n) { return n === d ? '1px' : '0px'; });
 
     var mid_anchor = d3.select(".middle-anchor");
-    const offset = (mid_anchor === 'undefined' ? getOffset(playNode.node()) : getOffset(mid_anchor.node()));
+    const offset = mid_anchor.empty() ? getOffset(playNode.node()) : getOffset(mid_anchor.node());
 
     if (tooltip.style('opacity') < 0.85) {
       tooltip.transition()
